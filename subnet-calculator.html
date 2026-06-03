@@ -1,0 +1,1949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Sloth — Free Subnet Calculator</title>
+  <meta name="description" content="Network Sloth: free subnet calculator with CIDR, Cisco wildcard masks, scenario planner, host ranges and CSV export. Slow but determined subnetting tools for network engineers.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep:       #0d0a05;
+      --bg-panel:      #161009;
+      --bg-card:       #1d150b;
+      --bg-hover:      #271c0e;
+      --border:        #3a2a14;
+      --border-bright: #56401e;
+      --accent:        #5cb870;
+      --accent-dim:    rgba(92,184,112,0.13);
+      --accent-glow:   rgba(92,184,112,0.32);
+      --amber:         #e8a020;
+      --amber-dim:     rgba(232,160,32,0.13);
+      --amber-glow:    rgba(232,160,32,0.28);
+      --red:           #e8505f;
+      --red-dim:       rgba(232,80,95,0.13);
+      --text-primary:  #eddfc0;
+      --text-secondary:#9a7d52;
+      --text-dim:      #4a3818;
+      --font-display:  'Nunito', sans-serif;
+      --font-mono:     'JetBrains Mono', monospace;
+      --font-body:     'Nunito', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-weight: 400;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Subtle grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(92,184,112,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(92,184,112,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAVIGATION ───────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      height: 58px;
+      background: rgba(13,10,5,0.96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      white-space: nowrap;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .logo-icon { font-size: 1.6rem; line-height: 1; }
+    .logo em   { color: var(--accent); font-style: normal; }
+    .logo span.sub { color: var(--text-secondary); font-weight: 600; font-size: 0.85rem; letter-spacing: 0; text-transform: none; }
+
+    /* ── HERO STRIP ──────────────────────────────────── */
+    .hero-strip {
+      background: linear-gradient(135deg, #1c1208 0%, #231a0a 60%, #1a1506 100%);
+      border-bottom: 1px solid var(--border-bright);
+      padding: 1.1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }
+    .hero-strip::after {
+      content: '🦥';
+      position: absolute;
+      right: -10px;
+      bottom: -20px;
+      font-size: 7rem;
+      opacity: 0.06;
+      pointer-events: none;
+      transform: scaleX(-1);
+    }
+    .hero-mascot { font-size: 3rem; line-height: 1; flex-shrink: 0; filter: drop-shadow(0 2px 8px rgba(92,184,112,0.3)); }
+    .hero-text   { flex: 1; min-width: 180px; }
+    .hero-title  {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: 0.2px;
+    }
+    .hero-sub    { font-size: 0.76rem; color: var(--text-secondary); margin-top: 0.18rem; line-height: 1.4; }
+    .hero-pills  { display: flex; gap: 0.45rem; flex-wrap: wrap; align-items: center; }
+    .hero-pill   {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      padding: 0.22rem 0.6rem;
+      border: 1px solid var(--border-bright);
+      border-radius: 20px;
+      color: var(--accent);
+      background: var(--accent-dim);
+      white-space: nowrap;
+    }
+
+    /* ── PANEL TITLE tweak for Nunito ────────────────── */
+    .panel-title { letter-spacing: 1.5px; }
+
+    .nav-badge {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 2px;
+      padding: 2px 5px;
+      margin-left: 8px;
+      vertical-align: middle;
+      opacity: 0.7;
+    }
+
+    .nav-tools {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .nav-tab {
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 0.35rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      background: transparent;
+      transition: all 0.18s ease;
+    }
+    .nav-tab:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+    .nav-tab.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+    .nav-tab.coming { opacity: 0.5; cursor: default; }
+    .nav-tab.coming:hover { border-color: var(--border); color: var(--text-secondary); background: transparent; }
+
+    /* ── AD ZONES ─────────────────────────────────────── */
+    .ad-zone {
+      border: 1px dashed var(--border-bright);
+      border-radius: 4px;
+      background: var(--bg-panel);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 1px;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .ad-leaderboard {
+      max-width: 728px;
+      height: 90px;
+      margin: 1rem auto 0;
+    }
+
+    .ad-sidebar-box {
+      width: 100%;
+      height: 280px;
+      margin-bottom: 1rem;
+    }
+
+    .ad-sidebar-box.tall { height: 600px; }
+
+    /* ── PAGE WRAPPER ────────────────────────────────── */
+    .page-outer {
+      position: relative;
+      z-index: 1;
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 0 1.25rem 3rem;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 180px 1fr 180px;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+      align-items: start;
+    }
+
+    .sidebar-col { display: flex; flex-direction: column; }
+
+    @media (max-width: 1050px) {
+      .main-grid { grid-template-columns: 1fr; }
+      .sidebar-col { display: none; }
+    }
+
+    /* ── PANEL COMPONENT ─────────────────────────────── */
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.7rem 1.25rem;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-green  { background: var(--accent);  box-shadow: 0 0 7px var(--accent); }
+    .dot-amber  { background: var(--amber);   box-shadow: 0 0 7px var(--amber); }
+    .dot-red    { background: var(--red);     box-shadow: 0 0 7px var(--red); }
+
+    .panel-title {
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--text-primary);
+    }
+
+    .panel-body { padding: 1.5rem; }
+
+    /* ── FORM FIELDS ─────────────────────────────────── */
+    .input-row {
+      display: grid;
+      grid-template-columns: 1.2fr 1.1fr 1fr 1fr;
+      gap: 1rem;
+      align-items: end;
+    }
+
+    @media (max-width: 720px) {
+      .input-row { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 440px) {
+      .input-row { grid-template-columns: 1fr; }
+    }
+
+    .field { display: flex; flex-direction: column; gap: 0.38rem; }
+
+    .field-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    .field input, .field select {
+      background: var(--bg-deep);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.58rem 0.75rem;
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s;
+      width: 100%;
+      -webkit-appearance: none;
+    }
+
+    .field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%235a7fa0'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      padding-right: 2rem;
+      cursor: pointer;
+    }
+
+    .field input:focus, .field select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-dim);
+    }
+
+    .field input.has-error { border-color: var(--red); box-shadow: 0 0 0 2px var(--red-dim); }
+
+    /* Mode toggle */
+    .mode-toggle {
+      display: flex;
+      background: var(--bg-deep);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 3px;
+      gap: 3px;
+    }
+
+    .mode-btn {
+      flex: 1;
+      border: 1px solid transparent;
+      border-radius: 3px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 0.45rem 0.3rem;
+      cursor: pointer;
+      transition: all 0.18s;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .mode-btn:hover { color: var(--text-primary); }
+    .mode-btn.active {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Action row */
+    .action-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 1.25rem;
+    }
+
+    .btn-primary {
+      padding: 0.62rem 2.2rem;
+      background: var(--accent);
+      color: var(--bg-deep);
+      border: none;
+      border-radius: 4px;
+      font-family: var(--font-display);
+      font-size: 0.92rem;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .btn-primary:hover {
+      background: #00f0c2;
+      box-shadow: 0 0 22px var(--accent-glow);
+      transform: translateY(-1px);
+    }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-ghost {
+      padding: 0.62rem 1.4rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-secondary);
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .btn-ghost:hover { border-color: var(--text-secondary); color: var(--text-primary); }
+
+    .btn-export {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.52rem 1.2rem;
+      background: transparent;
+      border: 1px solid var(--amber);
+      border-radius: 4px;
+      color: var(--amber);
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .btn-export:hover {
+      background: var(--amber-dim);
+      box-shadow: 0 0 14px var(--amber-glow);
+    }
+
+    /* Error */
+    .error-bar {
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.9rem;
+      padding: 0.6rem 0.9rem;
+      background: var(--red-dim);
+      border: 1px solid var(--red);
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.73rem;
+      color: var(--red);
+    }
+    .error-bar.visible { display: flex; }
+
+    /* ── SUMMARY STRIP ───────────────────────────────── */
+    .summary-strip {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    @media (max-width: 860px) {
+      .summary-strip { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .summary-strip { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .summary-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 0.85rem 1rem;
+    }
+
+    .sc-label {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 0.35rem;
+    }
+
+    .sc-value {
+      font-family: var(--font-mono);
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--accent);
+      word-break: break-all;
+    }
+
+    .sc-value.amber { color: var(--amber); }
+    .sc-value.small { font-size: 0.82rem; }
+
+    /* ── TABLE ───────────────────────────────────────── */
+    .table-panel {
+      margin-top: 1rem;
+    }
+
+    .table-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding: 0.85rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-card);
+    }
+
+    .result-count {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+    }
+    .result-count strong { color: var(--accent); font-weight: 500; }
+
+    .table-wrap { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      font-family: var(--font-display);
+      font-size: 0.67rem;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      padding: 0.65rem 0.85rem;
+      text-align: left;
+      background: var(--bg-card);
+      border-bottom: 2px solid var(--accent);
+      white-space: nowrap;
+    }
+
+    thead th:first-child { color: var(--text-dim); text-align: center; width: 48px; }
+    thead th.col-wc       { color: var(--amber); }
+
+    tbody tr { transition: background 0.1s; }
+    tbody tr:hover td { background: var(--bg-hover) !important; }
+    tbody tr:nth-child(odd) td { background: transparent; }
+    tbody tr:nth-child(even) td { background: rgba(255,255,255,0.018); }
+
+    tbody td {
+      font-family: var(--font-mono);
+      font-size: 0.77rem;
+      padding: 0.52rem 0.85rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    td.col-num   { text-align: center; color: var(--text-dim); font-size: 0.68rem; }
+    td.col-net   { color: var(--accent); font-weight: 500; }
+    td.col-wc    { color: var(--amber); }
+    td.col-hosts { text-align: right; padding-right: 1.25rem; }
+
+    /* Truncation for large tables */
+    .truncation-notice {
+      padding: 0.75rem 1.25rem;
+      background: var(--amber-dim);
+      border-top: 1px solid var(--amber);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--amber);
+      text-align: center;
+    }
+
+    /* ── EMPTY STATE ─────────────────────────────────── */
+    .empty-state {
+      padding: 4.5rem 2rem;
+      text-align: center;
+    }
+
+    .empty-icon {
+      font-size: 2.5rem;
+      opacity: 0.15;
+      margin-bottom: 1rem;
+    }
+
+    .empty-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-sub {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+
+    /* ── AFFILIATE STRIP ─────────────────────────────── */
+    .affiliate-strip {
+      margin-top: 1.5rem;
+      padding: 1rem 1.5rem;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .aff-label {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+
+    .aff-links {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .aff-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.38rem 0.85rem;
+      border: 1px solid var(--border-bright);
+      border-radius: 3px;
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.18s;
+    }
+    .aff-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    /* ── REFERENCE SECTION ───────────────────────────── */
+    .ref-section {
+      margin-top: 1.5rem;
+    }
+
+    .ref-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 600px) { .ref-grid { grid-template-columns: 1fr; } }
+
+    .ref-table-wrap { overflow-x: auto; }
+
+    .ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+    }
+
+    .ref-table th {
+      padding: 0.5rem 0.75rem;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--accent);
+      font-family: var(--font-display);
+      font-size: 0.63rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      text-align: left;
+    }
+
+    .ref-table td {
+      padding: 0.42rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-primary);
+    }
+
+    .ref-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+    .ref-table td:first-child { color: var(--accent); }
+
+    /* ── FOOTER ──────────────────────────────────────── */
+    footer {
+      position: relative;
+      z-index: 1;
+      margin-top: 3rem;
+      border-top: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+    }
+
+    .footer-ad-wrap {
+      max-width: 728px;
+      margin: 0 auto 2rem;
+    }
+
+    .footer-ad {
+      height: 90px;
+    }
+
+    .footer-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .footer-nav a {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.18s;
+    }
+    .footer-nav a:hover { color: var(--accent); }
+
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      text-align: center;
+    }
+
+    /* ── TAB SWITCHER ───────────────────────────────── */
+    .tab-switcher {
+      display: flex;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px;
+      gap: 4px;
+      margin-bottom: 1rem;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 0.55rem 1rem;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: var(--font-display);
+      font-size: 0.83rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.18s;
+      text-align: center;
+    }
+    .tab-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+    .tab-btn:not(.active):hover { color: var(--text-primary); border-color: var(--border-bright); }
+
+    /* ── SCENARIO PICKER ─────────────────────────────── */
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 0.85rem;
+    }
+    .scenario-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.1rem 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .scenario-card:hover {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px var(--accent-glow);
+    }
+    .sc-icon  { font-size: 1.9rem; line-height: 1; }
+    .sc-name  { font-family: var(--font-display); font-size: 0.84rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text-primary); }
+    .sc-desc  { font-size: 0.71rem; color: var(--text-secondary); line-height: 1.4; }
+    .sc-meta  { font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-dim); }
+
+    /* ── SCENARIO EDITOR ─────────────────────────────── */
+    .sce-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+    .sce-title  { font-family: var(--font-display); font-size: 1rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .sce-subdesc { font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.2rem; }
+
+    .btn-back {
+      padding: 0.42rem 1rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-secondary);
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.18s;
+      white-space: nowrap;
+    }
+    .btn-back:hover { border-color: var(--text-secondary); color: var(--text-primary); }
+
+    .vlan-table-wrap { overflow-x: auto; margin-bottom: 1.25rem; }
+
+    .vlan-editor { width: 100%; border-collapse: collapse; }
+    .vlan-editor th {
+      font-family: var(--font-display);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      padding: 0.5rem 0.6rem;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--accent);
+      text-align: left;
+      white-space: nowrap;
+    }
+    .vlan-editor td { padding: 0.35rem 0.4rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .vlan-editor tr:hover td { background: var(--bg-hover); }
+
+    .vlan-badge { display: inline-block; width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+    .vi {
+      background: var(--bg-deep);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.32rem 0.5rem;
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      outline: none;
+      width: 100%;
+      transition: border-color 0.15s;
+    }
+    .vi:focus    { border-color: var(--accent); }
+    .vi.w-color  { max-width: 88px; cursor: pointer; }
+    .vi.w-name   { min-width: 130px; }
+    .vi.w-id     { max-width: 62px; }
+    .vi.w-hosts  { max-width: 80px; }
+    .vi.w-note   { min-width: 180px; font-size: 0.72rem; }
+
+    .btn-del {
+      width: 22px; height: 22px;
+      display: flex; align-items: center; justify-content: center;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      cursor: pointer;
+      padding: 0; line-height: 1;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+    .btn-del:hover { border-color: var(--red); color: var(--red); background: var(--red-dim); }
+
+    .btn-add-vlan {
+      padding: 0.42rem 1.2rem;
+      background: transparent;
+      border: 1px dashed var(--border-bright);
+      border-radius: 4px;
+      color: var(--text-secondary);
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .btn-add-vlan:hover { border-color: var(--accent); color: var(--accent); border-style: solid; }
+
+    .base-row {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── SCENARIO RESULTS ────────────────────────────── */
+    .scen-results-table { width: 100%; border-collapse: collapse; }
+    .scen-results-table th {
+      font-family: var(--font-display);
+      font-size: 0.61rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      padding: 0.6rem 0.75rem;
+      background: var(--bg-card);
+      border-bottom: 2px solid var(--accent);
+      white-space: nowrap;
+      text-align: left;
+    }
+    .scen-results-table th.wc-col { color: var(--amber); }
+    .scen-results-table td {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      padding: 0.52rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+    .scen-results-table tr:hover td { background: var(--bg-hover); }
+    .scen-results-table tr:nth-child(even) td { background: rgba(255,255,255,0.018); }
+    .scen-results-table tr:nth-child(even):hover td { background: var(--bg-hover); }
+
+    .vlan-name-cell { display: flex; align-items: center; gap: 6px; }
+    .td-notes { font-size: 0.67rem; color: var(--text-secondary); max-width: 200px; white-space: normal; line-height: 1.3; }
+    .td-net   { color: var(--accent); font-weight: 500; }
+    .td-wc    { color: var(--amber); }
+    .td-gw    { color: #38bdf8; }
+
+    /* ── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 600px) {
+      nav { padding: 0 1rem; }
+      .nav-tools { display: none; }
+      .page-outer { padding: 0 0.75rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ─────────────────────────────────────── -->
+<nav>
+  <div class="logo">
+    <span class="logo-icon">🦥</span>
+    <span>NETWORK <em>SLOTH</em></span>
+    <span class="nav-badge">FREE</span>
+  </div>
+  <div class="nav-tools">
+    <button class="nav-tab active">Subnet Calc</button>
+    <button class="nav-tab coming" title="Coming soon">VLSM Planner</button>
+    <button class="nav-tab coming" title="Coming soon">IP Converter</button>
+    <button class="nav-tab coming" title="Coming soon">Binary Calc</button>
+    <button class="nav-tab coming" title="Coming soon">More ▾</button>
+  </div>
+</nav>
+
+<!-- ── HERO STRIP ──────────────────────────────────────── -->
+<div class="hero-strip">
+  <div class="hero-mascot">🦥</div>
+  <div class="hero-text">
+    <div class="hero-title">Stop struggling with subnets. Let the sloth do the maths.</div>
+    <div class="hero-sub">Free subnet calculator &amp; network planner — no sign-up, no nonsense. <em style="color:var(--amber)">Slow but determined.</em></div>
+  </div>
+  <div class="hero-pills">
+    <span class="hero-pill">✓ CIDR Calculator</span>
+    <span class="hero-pill">✓ Cisco Wildcard</span>
+    <span class="hero-pill">✓ Scenario Planner</span>
+    <span class="hero-pill">✓ VLSM Engine</span>
+    <span class="hero-pill">✓ CSV Export</span>
+  </div>
+</div>
+
+<div class="page-outer">
+
+  <!-- ── TOP AD ──────────────────────────────────────── -->
+  <div class="ad-zone ad-leaderboard">
+    <!--  REPLACE: Google AdSense 728×90 Leaderboard  -->
+    ADVERTISEMENT · 728×90 LEADERBOARD<br>
+    <span style="font-size:0.55rem;opacity:0.6;">Insert AdSense / Affiliate banner code here</span>
+  </div>
+
+  <div class="main-grid">
+
+    <!-- ── LEFT SIDEBAR ────────────────────────────── -->
+    <div class="sidebar-col">
+      <div class="ad-zone ad-sidebar-box">
+        <!--  REPLACE: 160×280 Rectangle  -->
+        AD<br>160×280<br>Rectangle<br><br>
+        <span style="font-size:0.55rem;opacity:0.6">AdSense / Affiliate</span>
+      </div>
+      <div class="ad-zone ad-sidebar-box">
+        <!--  REPLACE: 160×280  -->
+        AD<br>160×280<br>Rectangle
+      </div>
+    </div>
+
+    <!-- ── MAIN CONTENT ─────────────────────────────── -->
+    <div id="main-col">
+
+      <!-- TAB SWITCHER -->
+      <div class="tab-switcher">
+        <button class="tab-btn active" id="tab-btn-manual"   onclick="switchTab('manual')">⬡ Manual Calculator</button>
+        <button class="tab-btn"        id="tab-btn-scenario" onclick="switchTab('scenario')">🏢 Scenario Planner</button>
+      </div>
+
+      <!-- ══ MANUAL CALCULATOR TAB ══ -->
+      <div id="tab-manual">
+
+      <!-- INPUT PANEL -->
+      <div class="panel" id="input-panel">
+        <div class="panel-header">
+          <div class="dot dot-green"></div>
+          <div class="panel-title">Subnet Calculator</div>
+        </div>
+        <div class="panel-body">
+
+          <div class="input-row">
+
+            <!-- IP Address -->
+            <div class="field">
+              <div class="field-label">Network IP Address</div>
+              <input type="text" id="ip-input" placeholder="192.168.1.0" value="192.168.1.0" spellcheck="false">
+            </div>
+
+            <!-- Base CIDR -->
+            <div class="field">
+              <div class="field-label">Base Network Prefix</div>
+              <select id="cidr-select">
+                <option value="8">/8   —  255.0.0.0</option>
+                <option value="9">/9   —  255.128.0.0</option>
+                <option value="10">/10  —  255.192.0.0</option>
+                <option value="11">/11  —  255.224.0.0</option>
+                <option value="12">/12  —  255.240.0.0</option>
+                <option value="13">/13  —  255.248.0.0</option>
+                <option value="14">/14  —  255.252.0.0</option>
+                <option value="15">/15  —  255.254.0.0</option>
+                <option value="16">/16  —  255.255.0.0</option>
+                <option value="17">/17  —  255.255.128.0</option>
+                <option value="18">/18  —  255.255.192.0</option>
+                <option value="19">/19  —  255.255.224.0</option>
+                <option value="20">/20  —  255.255.240.0</option>
+                <option value="21">/21  —  255.255.248.0</option>
+                <option value="22">/22  —  255.255.252.0</option>
+                <option value="23">/23  —  255.255.254.0</option>
+                <option value="24" selected>/24  —  255.255.255.0</option>
+                <option value="25">/25  —  255.255.255.128</option>
+                <option value="26">/26  —  255.255.255.192</option>
+                <option value="27">/27  —  255.255.255.224</option>
+                <option value="28">/28  —  255.255.255.240</option>
+                <option value="29">/29  —  255.255.255.248</option>
+                <option value="30">/30  —  255.255.255.252</option>
+              </select>
+            </div>
+
+            <!-- Mode -->
+            <div class="field">
+              <div class="field-label">Calculation Mode</div>
+              <div class="mode-toggle">
+                <button class="mode-btn active" id="btn-mode-subnets" onclick="setMode('subnets')">Subnets</button>
+                <button class="mode-btn" id="btn-mode-hosts"   onclick="setMode('hosts')">Hosts</button>
+                <button class="mode-btn" id="btn-mode-custom"  onclick="setMode('custom')">Custom</button>
+              </div>
+            </div>
+
+            <!-- Dynamic value input -->
+            <div class="field" id="value-field">
+              <div class="field-label" id="value-label">Subnets Required</div>
+              <input type="number" id="value-input" placeholder="4" min="1">
+            </div>
+
+          </div>
+
+          <!-- Custom CIDR row (hidden by default) -->
+          <div id="custom-row" style="display:none; margin-top:1rem;">
+            <div class="field" style="max-width:270px">
+              <div class="field-label">New Subnet CIDR</div>
+              <select id="custom-cidr-sel"></select>
+            </div>
+          </div>
+
+          <!-- Error -->
+          <div class="error-bar" id="error-bar">
+            <span>⚠</span><span id="error-text"></span>
+          </div>
+
+          <!-- Actions -->
+          <div class="action-row">
+            <button class="btn-primary" onclick="calculate()">▶&nbsp; Calculate</button>
+            <button class="btn-ghost"   onclick="resetAll()">Reset</button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RESULTS SECTION (hidden until calc) -->
+      <div id="results-section" style="display:none">
+
+        <!-- Summary cards -->
+        <div class="summary-strip" id="summary-strip"></div>
+
+        <!-- Table panel -->
+        <div class="panel table-panel">
+          <div class="table-toolbar">
+            <div class="result-count" id="result-count"></div>
+            <button class="btn-export" onclick="exportCSV()">⬇ Export CSV</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Network Address</th>
+                  <th>Subnet Mask</th>
+                  <th>CIDR</th>
+                  <th class="col-wc">Wildcard Mask <span style="font-family:var(--font-mono);font-size:0.58rem;letter-spacing:0;opacity:0.7">(Cisco)</span></th>
+                  <th>First Host</th>
+                  <th>Last Host</th>
+                  <th>Broadcast</th>
+                  <th style="text-align:right;padding-right:1.25rem">Usable Hosts</th>
+                </tr>
+              </thead>
+              <tbody id="results-tbody"></tbody>
+            </table>
+          </div>
+          <div id="truncation-notice" class="truncation-notice" style="display:none"></div>
+        </div>
+
+      </div>
+
+      <!-- EMPTY STATE -->
+      <div class="panel" id="empty-panel">
+        <div class="empty-state">
+          <div class="empty-icon">⬡</div>
+          <div class="empty-title">Awaiting Input</div>
+          <div class="empty-sub">Enter your network details above and click Calculate</div>
+        </div>
+      </div>
+
+      <!-- AFFILIATE STRIP -->
+      <div class="affiliate-strip">
+        <div class="aff-label">Recommended</div>
+        <div class="aff-links">
+          <!--  REPLACE each href with your affiliate links  -->
+          <a class="aff-link" href="#" title="Affiliate link — replace with your URL">🔌 Cisco Training</a>
+          <a class="aff-link" href="#" title="Affiliate link — replace with your URL">📚 CompTIA Network+</a>
+          <a class="aff-link" href="#" title="Affiliate link — replace with your URL">🛡 Managed Hosting</a>
+          <a class="aff-link" href="#" title="Affiliate link — replace with your URL">📡 Network Gear</a>
+        </div>
+      </div>
+
+      <!-- QUICK REFERENCE TABLES -->
+      <div class="ref-section">
+        <div class="panel" style="margin-bottom:0.5rem">
+          <div class="panel-header">
+            <div class="dot dot-amber"></div>
+            <div class="panel-title">Quick Reference — CIDR / Subnet Cheat Sheet</div>
+          </div>
+          <div class="panel-body" style="padding:0">
+            <div class="ref-grid" style="padding:1rem;gap:1rem">
+
+              <div class="ref-table-wrap">
+                <table class="ref-table">
+                  <thead><tr><th>CIDR</th><th>Subnet Mask</th><th>Wildcard</th><th>Hosts</th></tr></thead>
+                  <tbody id="ref-tbody-a"></tbody>
+                </table>
+              </div>
+
+              <div class="ref-table-wrap">
+                <table class="ref-table">
+                  <thead><tr><th>CIDR</th><th>Subnet Mask</th><th>Wildcard</th><th>Hosts</th></tr></thead>
+                  <tbody id="ref-tbody-b"></tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      </div><!-- /tab-manual -->
+
+      <!-- ══ SCENARIO PLANNER TAB ══ -->
+      <div id="tab-scenario" style="display:none">
+
+        <!-- STEP 1: PICK SCENARIO -->
+        <div id="sc-step-picker">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="dot dot-green"></div>
+              <div class="panel-title">Choose a Real-World Scenario</div>
+            </div>
+            <div class="panel-body">
+              <p style="font-size:0.78rem;color:var(--text-secondary);margin-bottom:1.1rem;line-height:1.5">
+                Pick a network template below. Each scenario pre-loads a set of VLANs you can edit — then click <strong style="color:var(--accent)">Build Network Plan</strong> to auto-allocate optimised subnets using VLSM.
+              </p>
+              <div class="scenario-grid" id="scenario-grid"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: EDIT VLANs -->
+        <div id="sc-step-editor" style="display:none">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="dot dot-amber"></div>
+              <div class="panel-title" id="sce-panel-title">Configure VLANs</div>
+            </div>
+            <div class="panel-body">
+
+              <div class="sce-header">
+                <div>
+                  <div class="sce-title"    id="sce-title"></div>
+                  <div class="sce-subdesc"  id="sce-subdesc"></div>
+                </div>
+                <button class="btn-back" onclick="scenarioStep('picker')">← Scenarios</button>
+              </div>
+
+              <div class="vlan-table-wrap">
+                <table class="vlan-editor" id="vlan-editor-table">
+                  <thead>
+                    <tr>
+                      <th style="width:96px">Colour</th>
+                      <th>VLAN Name / Purpose</th>
+                      <th>VLAN ID</th>
+                      <th>Hosts Needed</th>
+                      <th>Cisco / Notes</th>
+                      <th style="width:30px"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="vlan-editor-tbody"></tbody>
+                </table>
+              </div>
+
+              <button class="btn-add-vlan" onclick="addVlanRow(null)" style="margin-bottom:1.5rem">+ Add VLAN</button>
+
+              <div class="base-row">
+                <div class="field">
+                  <div class="field-label">Base Network IP</div>
+                  <input type="text" id="sc-base-ip" class="vi" style="width:155px" spellcheck="false" placeholder="10.0.0.0">
+                </div>
+                <div class="field">
+                  <div class="field-label">Base Prefix</div>
+                  <select id="sc-base-cidr" class="vi" style="width:185px;cursor:pointer">
+                    <option value="8">/8  — 255.0.0.0</option>
+                    <option value="16" selected>/16 — 255.255.0.0</option>
+                    <option value="20">/20 — 255.255.240.0</option>
+                    <option value="24">/24 — 255.255.255.0</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="error-bar" id="sc-error-bar" style="margin-top:1rem">
+                <span>⚠</span><span id="sc-error-text"></span>
+              </div>
+
+              <div class="action-row">
+                <button class="btn-primary" onclick="buildNetworkPlan()">⬡ Build Network Plan</button>
+                <button class="btn-ghost"   onclick="scenarioStep('picker')">← Back</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: RESULTS -->
+        <div id="sc-step-results" style="display:none">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="dot dot-green"></div>
+              <div class="panel-title" id="sc-results-title">Network Allocation Plan</div>
+            </div>
+            <div class="table-toolbar">
+              <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+                <button class="btn-back" onclick="scenarioStep('editor')">← Edit VLANs</button>
+                <div class="result-count" id="sc-result-count"></div>
+              </div>
+              <button class="btn-export" onclick="exportScenarioCSV()">⬇ Export CSV</button>
+            </div>
+            <div class="table-wrap">
+              <table class="scen-results-table">
+                <thead>
+                  <tr>
+                    <th>VLAN Name</th>
+                    <th>VLAN ID</th>
+                    <th>Network Address</th>
+                    <th>Subnet Mask</th>
+                    <th>CIDR</th>
+                    <th class="wc-col">Wildcard (Cisco)</th>
+                    <th>Gateway</th>
+                    <th>DHCP Range</th>
+                    <th>Broadcast</th>
+                    <th style="text-align:right;padding-right:1.25rem">Usable Hosts</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody id="sc-results-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="summary-strip" id="sc-summary-strip" style="margin-top:1rem"></div>
+        </div>
+
+      </div><!-- /tab-scenario -->
+
+    </div><!-- /main-col -->
+
+    <!-- ── RIGHT SIDEBAR ────────────────────────────── -->
+    <div class="sidebar-col">
+      <div class="ad-zone ad-sidebar-box">
+        <!--  REPLACE: 160×280  -->
+        AD<br>160×280<br>Rectangle<br><br>
+        <span style="font-size:0.55rem;opacity:0.6">AdSense / Affiliate</span>
+      </div>
+      <div class="ad-zone ad-sidebar-box">
+        <!--  REPLACE: 160×280  -->
+        AD<br>160×280<br>Rectangle
+      </div>
+    </div>
+
+  </div><!-- /main-grid -->
+
+</div><!-- /page-outer -->
+
+<!-- ── FOOTER ──────────────────────────────────────────── -->
+<footer>
+  <div class="footer-ad-wrap">
+    <div class="ad-zone footer-ad">
+      <!--  REPLACE: 728×90 footer ad  -->
+      ADVERTISEMENT · 728×90 FOOTER BANNER<br>
+      <span style="font-size:0.55rem;opacity:0.6">Insert AdSense / Affiliate banner code here</span>
+    </div>
+  </div>
+  <div class="footer-inner">
+    <div class="logo" style="font-size:1rem">
+      <span class="logo-icon" style="font-size:1.4rem">🦥</span>
+      <span>NETWORK <em>SLOTH</em></span>
+    </div>
+    <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim);letter-spacing:1px;text-align:center;font-style:italic">
+      "Slow but determined subnetting since 2026"
+    </div>
+    <div class="footer-nav">
+      <a href="#">About</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Cookie Policy</a>
+      <a href="#">Advertise</a>
+      <a href="#">Subnet Cheat Sheet (PDF)</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="footer-copy">
+      © 2026 Network Sloth · Free tools for network engineers · All calculations provided for informational purposes only
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Utilities ────────────────────────────────────── */
+function ipToNum(ip) {
+  const p = ip.trim().split('.');
+  if (p.length !== 4) return null;
+  const n = p.map(Number);
+  if (n.some(x => isNaN(x) || x < 0 || x > 255)) return null;
+  return ((n[0] << 24) | (n[1] << 16) | (n[2] << 8) | n[3]) >>> 0;
+}
+
+function numToIp(n) {
+  n = n >>> 0;
+  return [(n >>> 24) & 255, (n >>> 16) & 255, (n >>> 8) & 255, n & 255].join('.');
+}
+
+function cidrToMaskNum(cidr) {
+  if (cidr === 0) return 0;
+  return (0xFFFFFFFF << (32 - cidr)) >>> 0;
+}
+
+function cidrToMask(cidr) { return numToIp(cidrToMaskNum(cidr)); }
+
+function maskToWildcard(maskStr) {
+  return maskStr.split('.').map(Number).map(b => 255 - b).join('.');
+}
+
+function numComma(n) { return n.toLocaleString(); }
+
+/* ── Mode management ──────────────────────────────── */
+let currentMode = 'subnets';
+let lastResults  = [];
+const MAX_ROWS   = 512;
+
+function setMode(mode) {
+  currentMode = mode;
+  ['subnets','hosts','custom'].forEach(m => {
+    document.getElementById('btn-mode-' + m).classList.toggle('active', m === mode);
+  });
+  const vf = document.getElementById('value-field');
+  const cr = document.getElementById('custom-row');
+  if (mode === 'custom') {
+    vf.style.display = 'none';
+    cr.style.display = 'block';
+    refreshCustomCidr();
+  } else {
+    vf.style.display = 'flex';
+    cr.style.display = 'none';
+    document.getElementById('value-label').textContent =
+      mode === 'subnets' ? 'Subnets Required' : 'Hosts per Subnet';
+    document.getElementById('value-input').placeholder =
+      mode === 'subnets' ? '4' : '50';
+  }
+  clearError();
+}
+
+function refreshCustomCidr() {
+  const base = parseInt(document.getElementById('cidr-select').value);
+  const sel  = document.getElementById('custom-cidr-sel');
+  sel.innerHTML = '';
+  for (let i = base + 1; i <= 30; i++) {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `/${i}  —  ${cidrToMask(i)}`;
+    sel.appendChild(opt);
+  }
+}
+
+document.getElementById('cidr-select').addEventListener('change', () => {
+  if (currentMode === 'custom') refreshCustomCidr();
+});
+
+/* ── Error handling ───────────────────────────────── */
+function showError(msg) {
+  const bar = document.getElementById('error-bar');
+  document.getElementById('error-text').textContent = msg;
+  bar.classList.add('visible');
+  document.getElementById('ip-input').classList.remove('has-error');
+}
+function clearError() {
+  document.getElementById('error-bar').classList.remove('visible');
+  document.getElementById('ip-input').classList.remove('has-error');
+}
+
+/* ── Core calculation ─────────────────────────────── */
+function calculate() {
+  clearError();
+  const ipStr   = document.getElementById('ip-input').value.trim();
+  const baseCidr = parseInt(document.getElementById('cidr-select').value);
+
+  // Validate IP
+  const ipNum = ipToNum(ipStr);
+  if (ipNum === null) {
+    document.getElementById('ip-input').classList.add('has-error');
+    showError('Invalid IP address. Use dotted-decimal notation, e.g. 192.168.1.0');
+    return;
+  }
+
+  let newCidr;
+
+  if (currentMode === 'custom') {
+    newCidr = parseInt(document.getElementById('custom-cidr-sel').value);
+  } else {
+    const value = parseInt(document.getElementById('value-input').value);
+    if (isNaN(value) || value < 1) {
+      showError('Please enter a valid positive number.');
+      return;
+    }
+
+    if (currentMode === 'subnets') {
+      const bitsNeeded = Math.ceil(Math.log2(value));
+      newCidr = baseCidr + (bitsNeeded < 1 ? 1 : bitsNeeded);
+      if (newCidr > 30) {
+        showError(`Cannot fit ${numComma(value)} subnets within /${baseCidr}. Maximum is ${numComma(Math.pow(2, 30 - baseCidr))} subnets.`);
+        return;
+      }
+    } else {
+      // hosts mode
+      let hostBits = Math.ceil(Math.log2(value + 2));
+      if (hostBits < 2) hostBits = 2;
+      newCidr = 32 - hostBits;
+      if (newCidr < baseCidr) {
+        showError(`${numComma(value)} hosts/subnet requires /${newCidr}, which is outside the base /${baseCidr} network. Use a larger base network.`);
+        return;
+      }
+      if (newCidr > 30) {
+        showError('Minimum usable subnet is /30 (2 hosts). Please increase the host count.');
+        return;
+      }
+    }
+  }
+
+  if (newCidr <= baseCidr) {
+    showError(`New CIDR (/${newCidr}) must be more specific than the base (/${baseCidr}).`);
+    return;
+  }
+
+  // Align to base network boundary
+  const baseMaskNum  = cidrToMaskNum(baseCidr);
+  const networkBase  = (ipNum & baseMaskNum) >>> 0;
+  const subnetSize   = Math.pow(2, 32 - newCidr);
+  const totalSubnets = Math.pow(2, newCidr - baseCidr);
+  const usableHosts  = subnetSize - 2;
+  const subnetMask   = cidrToMask(newCidr);
+  const wildcard     = maskToWildcard(subnetMask);
+
+  const results = [];
+  const cap = Math.min(totalSubnets, MAX_ROWS);
+
+  for (let i = 0; i < cap; i++) {
+    const netNum    = (networkBase + i * subnetSize) >>> 0;
+    const bcastNum  = (netNum + subnetSize - 1) >>> 0;
+    results.push({
+      num:       i + 1,
+      network:   numToIp(netNum),
+      mask:      subnetMask,
+      cidr:      '/' + newCidr,
+      wildcard:  wildcard,
+      firstHost: usableHosts > 0 ? numToIp((netNum + 1) >>> 0) : '—',
+      lastHost:  usableHosts > 0 ? numToIp((bcastNum - 1) >>> 0) : '—',
+      broadcast: numToIp(bcastNum),
+      usable:    usableHosts
+    });
+  }
+
+  lastResults = results;
+  renderResults(results, {
+    newCidr, baseCidr, totalSubnets, usableHosts, subnetMask, wildcard,
+    truncated: totalSubnets > MAX_ROWS
+  });
+}
+
+/* ── Render results ───────────────────────────────── */
+function renderResults(results, meta) {
+  document.getElementById('empty-panel').style.display = 'none';
+  document.getElementById('results-section').style.display = 'block';
+
+  const borrowedBits = meta.newCidr - meta.baseCidr;
+
+  // Summary strip
+  document.getElementById('summary-strip').innerHTML = `
+    <div class="summary-card">
+      <div class="sc-label">Total Subnets</div>
+      <div class="sc-value">${numComma(meta.totalSubnets)}</div>
+    </div>
+    <div class="summary-card">
+      <div class="sc-label">Hosts / Subnet</div>
+      <div class="sc-value">${numComma(meta.usableHosts)}</div>
+    </div>
+    <div class="summary-card">
+      <div class="sc-label">New Subnet Mask</div>
+      <div class="sc-value small">${meta.subnetMask}</div>
+    </div>
+    <div class="summary-card">
+      <div class="sc-label">CIDR Notation</div>
+      <div class="sc-value">/${meta.newCidr}</div>
+    </div>
+    <div class="summary-card">
+      <div class="sc-label">Bits Borrowed</div>
+      <div class="sc-value">${borrowedBits}</div>
+    </div>
+    <div class="summary-card">
+      <div class="sc-label">Wildcard (Cisco)</div>
+      <div class="sc-value amber small">${meta.wildcard}</div>
+    </div>
+  `;
+
+  // Row count
+  document.getElementById('result-count').innerHTML =
+    `Showing <strong>${numComma(results.length)}</strong> of <strong>${numComma(meta.totalSubnets)}</strong> subnet${meta.totalSubnets !== 1 ? 's' : ''}`;
+
+  // Table body
+  const tbody = document.getElementById('results-tbody');
+  tbody.innerHTML = '';
+  const frag = document.createDocumentFragment();
+  results.forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="col-num">${r.num}</td>
+      <td class="col-net">${r.network}</td>
+      <td>${r.mask}</td>
+      <td>${r.cidr}</td>
+      <td class="col-wc">${r.wildcard}</td>
+      <td>${r.firstHost}</td>
+      <td>${r.lastHost}</td>
+      <td>${r.broadcast}</td>
+      <td class="col-hosts">${numComma(r.usable)}</td>
+    `;
+    frag.appendChild(tr);
+  });
+  tbody.appendChild(frag);
+
+  // Truncation notice
+  const tn = document.getElementById('truncation-notice');
+  if (meta.truncated) {
+    tn.style.display = 'block';
+    tn.textContent = `⚠  Showing first ${numComma(MAX_ROWS)} of ${numComma(meta.totalSubnets)} subnets to maintain performance. Export CSV includes all displayed rows.`;
+  } else {
+    tn.style.display = 'none';
+  }
+}
+
+/* ── Reset ────────────────────────────────────────── */
+function resetAll() {
+  document.getElementById('ip-input').value = '192.168.1.0';
+  document.getElementById('cidr-select').value = '24';
+  document.getElementById('value-input').value = '';
+  clearError();
+  document.getElementById('results-section').style.display = 'none';
+  document.getElementById('empty-panel').style.display = 'block';
+  lastResults = [];
+}
+
+/* ── CSV export ───────────────────────────────────── */
+function exportCSV() {
+  if (!lastResults.length) return;
+  const headers = ['#','Network Address','Subnet Mask','CIDR','Wildcard Mask (Cisco)','First Host','Last Host','Broadcast','Usable Hosts'];
+  const rows = lastResults.map(r =>
+    [r.num, r.network, r.mask, r.cidr, r.wildcard, r.firstHost, r.lastHost, r.broadcast, r.usable]
+  );
+  const csv = [headers, ...rows].map(row => row.map(v => `"${v}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = Object.assign(document.createElement('a'), { href: url, download: 'subnet-table.csv' });
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ── Quick reference tables ───────────────────────── */
+(function buildRefTables() {
+  const rows = [];
+  for (let c = 8; c <= 30; c++) {
+    const mask  = cidrToMask(c);
+    const wc    = maskToWildcard(mask);
+    const hosts = Math.max(0, Math.pow(2, 32 - c) - 2);
+    rows.push({ cidr: '/' + c, mask, wc, hosts: numComma(hosts) });
+  }
+  const half = Math.ceil(rows.length / 2);
+  ['a','b'].forEach((id, idx) => {
+    const tbody = document.getElementById('ref-tbody-' + id);
+    rows.slice(idx * half, (idx + 1) * half).forEach(r => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${r.cidr}</td><td>${r.mask}</td><td>${r.wc}</td><td style="text-align:right;padding-right:0.75rem">${r.hosts}</td>`;
+      tbody.appendChild(tr);
+    });
+  });
+})();
+
+/* ── Scenario Planner ─────────────────────────────── */
+const COLOR_HEX = {
+  green:'#22c55e', amber:'#f5a623', blue:'#38bdf8',
+  red:'#ff4d6d', purple:'#a78bfa', orange:'#fb923c', teal:'#2dd4bf'
+};
+
+const SCENARIOS = {
+  'small-corp': {
+    name:'Small Corporate Network', icon:'🏢',
+    desc:'Typical SMB with segmented VLANs for staff, voice, guest WiFi and CCTV cameras.',
+    baseIp:'192.168.0.0', baseCidr:'16',
+    vlans:[
+      { color:'green',  name:'LAN / Staff',    id:10, hosts:200, note:'Main user VLAN. DHCP .10–.254. Default gateway' },
+      { color:'amber',  name:'Voice / VoIP',   id:20, hosts:50,  note:'QoS DSCP EF. CDP/LLDP for IP phones' },
+      { color:'blue',   name:'Guest WiFi',     id:30, hosts:100, note:'Internet-only ACL. Isolated from LAN & Voice' },
+      { color:'red',    name:'CCTV / Cameras', id:40, hosts:30,  note:'No internet. NVR access only. Block inter-VLAN' },
+      { color:'purple', name:'Management',     id:99, hosts:10,  note:'Switch/AP/router OOB. Restrict to admins only' },
+    ]
+  },
+  'medium-enterprise': {
+    name:'Medium Enterprise', icon:'🏗',
+    desc:'Multi-department office with DMZ, server VLAN, IoT segment and dedicated WAN links.',
+    baseIp:'10.0.0.0', baseCidr:'8',
+    vlans:[
+      { color:'green',  name:'Users / LAN',    id:10, hosts:500, note:'Main corporate LAN. AD/DHCP from DC' },
+      { color:'amber',  name:'Servers / DC',   id:20, hosts:50,  note:'Static IPs. DNS, DHCP, AD, File servers' },
+      { color:'blue',   name:'VoIP',           id:30, hosts:150, note:'QoS DSCP EF. 802.1p CoS 5. Auto-QoS' },
+      { color:'red',    name:'DMZ',            id:40, hosts:20,  note:'Web/mail facing internet. Firewall required' },
+      { color:'purple', name:'Guest',          id:50, hosts:200, note:'Internet-only. Rate limited. Captive portal' },
+      { color:'orange', name:'IoT / Building', id:60, hosts:100, note:'BMS, printers, sensors. No DC access' },
+      { color:'teal',   name:'Management',     id:99, hosts:20,  note:'OOB management. SSH/HTTPS only' },
+    ]
+  },
+  'home-lab': {
+    name:'Home Lab', icon:'🧪',
+    desc:'Personal homelab with trusted devices, IoT isolation, sandbox VMs and VPN clients.',
+    baseIp:'192.168.0.0', baseCidr:'16',
+    vlans:[
+      { color:'green',  name:'Trusted / Main', id:10, hosts:30, note:'Laptops, phones, TVs. Full internet access' },
+      { color:'amber',  name:'IoT Devices',    id:20, hosts:50, note:'Smart home. Block internet where possible' },
+      { color:'red',    name:'Lab / Sandbox',  id:30, hosts:20, note:'VMs, test servers. No production access' },
+      { color:'purple', name:'VPN Clients',    id:40, hosts:10, note:'WireGuard/OpenVPN tunnel addresses' },
+    ]
+  },
+  'branch-office': {
+    name:'Branch Office', icon:'📡',
+    desc:'Remote site with SD-WAN/MPLS back to HQ. Minimal local services.',
+    baseIp:'172.16.0.0', baseCidr:'16',
+    vlans:[
+      { color:'green',  name:'Staff LAN',       id:10, hosts:80, note:'DHCP from HQ or local scope' },
+      { color:'amber',  name:'VoIP',            id:20, hosts:40, note:'QoS required over WAN. Local survivability' },
+      { color:'blue',   name:'Printers / MFP',  id:30, hosts:10, note:'Isolated. Print server at HQ via WAN' },
+      { color:'purple', name:'Guest WiFi',      id:40, hosts:50, note:'Local internet breakout only. No HQ access' },
+      { color:'red',    name:'WAN / P2P Links', id:99, hosts:2,  note:'/30 point-to-point links to HQ/DC' },
+    ]
+  },
+  'data-centre': {
+    name:'Data Centre', icon:'🖥',
+    desc:'Rack infrastructure with OOB management, storage fabric, production tiers and DR replication.',
+    baseIp:'10.10.0.0', baseCidr:'16',
+    vlans:[
+      { color:'green',  name:'Production',      id:10, hosts:200, note:'App and web servers. HA pairs. Redundant NICs' },
+      { color:'amber',  name:'Storage / iSCSI', id:20, hosts:50,  note:'Jumbo frames MTU 9000. Dedicated HBAs' },
+      { color:'blue',   name:'Backup',          id:30, hosts:30,  note:'Veeam/backup agents. Scheduled off-peak' },
+      { color:'red',    name:'OOB Management',  id:40, hosts:50,  note:'iDRAC/iLO/IPMI. Air-gap if possible' },
+      { color:'purple', name:'Replication / DR',id:50, hosts:20,  note:'Encrypted DR tunnel. Scheduled replication' },
+    ]
+  }
+};
+
+/* Tab switching */
+function switchTab(tab) {
+  ['manual','scenario'].forEach(t => {
+    document.getElementById('tab-' + t).style.display = t === tab ? 'block' : 'none';
+    document.getElementById('tab-btn-' + t).classList.toggle('active', t === tab);
+  });
+}
+
+/* Scenario step navigation */
+function scenarioStep(step) {
+  ['picker','editor','results'].forEach(s => {
+    document.getElementById('sc-step-' + s).style.display = s === step ? 'block' : 'none';
+  });
+}
+
+/* Build picker cards */
+(function buildScenarioPicker() {
+  const grid = document.getElementById('scenario-grid');
+  Object.entries(SCENARIOS).forEach(([id, sc]) => {
+    const card = document.createElement('div');
+    card.className = 'scenario-card';
+    card.innerHTML = `
+      <div class="sc-icon">${sc.icon}</div>
+      <div class="sc-name">${sc.name}</div>
+      <div class="sc-desc">${sc.desc}</div>
+      <div class="sc-meta">${sc.vlans.length} VLANs &nbsp;·&nbsp; Base: ${sc.baseIp}/${sc.baseCidr}</div>
+    `;
+    card.onclick = () => loadScenario(id);
+    grid.appendChild(card);
+  });
+})();
+
+let activeScenarioId = null;
+let scenarioResults  = [];
+
+function loadScenario(id) {
+  const sc = SCENARIOS[id];
+  activeScenarioId = id;
+  document.getElementById('sce-title').textContent      = sc.name;
+  document.getElementById('sce-subdesc').textContent    = sc.desc;
+  document.getElementById('sce-panel-title').textContent = sc.name + ' — Configure VLANs';
+  document.getElementById('sc-base-ip').value           = sc.baseIp;
+  document.getElementById('sc-base-cidr').value         = sc.baseCidr;
+  document.getElementById('sc-error-bar').classList.remove('visible');
+
+  const tbody = document.getElementById('vlan-editor-tbody');
+  tbody.innerHTML = '';
+  sc.vlans.forEach(v => addVlanRow(v));
+  scenarioStep('editor');
+}
+
+function escH(s) {
+  return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+}
+
+function addVlanRow(data) {
+  const tbody  = document.getElementById('vlan-editor-tbody');
+  const colors = Object.keys(COLOR_HEX);
+  const color  = data ? data.color : colors[tbody.rows.length % colors.length];
+  const opts   = colors.map(c =>
+    `<option value="${c}" ${c === color ? 'selected':''}>${c.charAt(0).toUpperCase()+c.slice(1)}</option>`
+  ).join('');
+
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td>
+      <select class="vi w-color" onchange="syncBadge(this)">
+        ${opts}
+      </select>
+    </td>
+    <td><input  type="text"   class="vi w-name"  value="${data ? escH(data.name)  : ''}" placeholder="e.g. Staff LAN"></td>
+    <td><input  type="number" class="vi w-id"    value="${data ? data.id    : ''}" placeholder="10"  min="1" max="4094"></td>
+    <td><input  type="number" class="vi w-hosts" value="${data ? data.hosts : ''}" placeholder="50"  min="1"></td>
+    <td><input  type="text"   class="vi w-note"  value="${data ? escH(data.note)  : ''}" placeholder="Optional Cisco / design notes"></td>
+    <td><button class="btn-del" onclick="this.closest('tr').remove()" title="Remove">×</button></td>
+  `;
+  tbody.appendChild(tr);
+}
+
+/* ── VLSM allocation engine ───────────────────────── */
+function buildNetworkPlan() {
+  const baseIpStr = document.getElementById('sc-base-ip').value.trim();
+  const baseCidr  = parseInt(document.getElementById('sc-base-cidr').value);
+  const errBar    = document.getElementById('sc-error-bar');
+  const errTxt    = document.getElementById('sc-error-text');
+  errBar.classList.remove('visible');
+
+  const baseIpNum = ipToNum(baseIpStr);
+  if (!baseIpNum && baseIpNum !== 0) {
+    errTxt.textContent = 'Invalid base IP address.';
+    errBar.classList.add('visible');
+    return;
+  }
+
+  // Read rows from editor
+  const vlans = [];
+  let hasErr = false;
+  document.querySelectorAll('#vlan-editor-tbody tr').forEach((tr, idx) => {
+    const inputs = tr.querySelectorAll('select,input');
+    const color  = inputs[0].value;
+    const name   = inputs[1].value.trim() || ('VLAN ' + (idx + 1));
+    const vlanId = parseInt(inputs[2].value) || (10 * (idx + 1));
+    const hosts  = parseInt(inputs[3].value);
+    const note   = inputs[4].value.trim();
+    if (isNaN(hosts) || hosts < 1) {
+      errTxt.textContent = `Row ${idx+1} ("${name}"): enter a valid host count (min 1).`;
+      errBar.classList.add('visible');
+      hasErr = true;
+    }
+    vlans.push({ color, name, vlanId, hosts, note });
+  });
+  if (hasErr || !vlans.length) return;
+
+  // VLSM: sort largest-first for efficient packing
+  const sorted      = [...vlans].sort((a, b) => b.hosts - a.hosts);
+  const baseMaskNum = cidrToMaskNum(baseCidr);
+  let   cursor      = (baseIpNum & baseMaskNum) >>> 0;
+  const spaceEnd    = (cursor + Math.pow(2, 32 - baseCidr) - 1) >>> 0;
+  const allocs      = [];
+
+  for (const v of sorted) {
+    let   hBits = Math.ceil(Math.log2(v.hosts + 2));
+    if (hBits < 2) hBits = 2;
+    const sCidr    = 32 - hBits;
+    const sSize    = Math.pow(2, hBits);
+    // Align cursor to subnet boundary
+    if (cursor % sSize !== 0)
+      cursor = (Math.floor(cursor / sSize) + 1) * sSize;
+
+    const netNum   = cursor >>> 0;
+    const bcastNum = (netNum + sSize - 1) >>> 0;
+
+    if (bcastNum > spaceEnd) {
+      errTxt.textContent = `Address space exhausted allocating "${v.name}". Choose a larger base network (/8 or /16).`;
+      errBar.classList.add('visible');
+      return;
+    }
+
+    const mask      = cidrToMask(sCidr);
+    const wildcard  = maskToWildcard(mask);
+    const gw        = numToIp((netNum + 1) >>> 0);
+    const dhcpStart = numToIp((netNum + 2) >>> 0);
+    const dhcpEnd   = numToIp((bcastNum - 1) >>> 0);
+
+    allocs.push({
+      ...v,
+      network:   numToIp(netNum),
+      mask,
+      cidr:      '/' + sCidr,
+      wildcard,
+      gateway:   gw,
+      dhcpRange: dhcpStart + ' – ' + dhcpEnd,
+      broadcast: numToIp(bcastNum),
+      usable:    sSize - 2
+    });
+    cursor = (bcastNum + 1) >>> 0;
+  }
+
+  // Re-sort by VLAN ID for display
+  allocs.sort((a, b) => a.vlanId - b.vlanId);
+  scenarioResults = allocs;
+  renderScenarioResults(allocs);
+}
+
+function renderScenarioResults(allocs) {
+  const sc = SCENARIOS[activeScenarioId];
+  document.getElementById('sc-results-title').textContent =
+    (sc ? sc.name : 'Network') + ' — Subnet Allocation Plan';
+
+  const baseIp   = document.getElementById('sc-base-ip').value;
+  const baseCidr = document.getElementById('sc-base-cidr').value;
+  document.getElementById('sc-result-count').innerHTML =
+    `<strong>${allocs.length}</strong> VLAN${allocs.length!==1?'s':''} &nbsp;·&nbsp; Base: <strong>${baseIp}/${baseCidr}</strong>`;
+
+  const tbody = document.getElementById('sc-results-tbody');
+  tbody.innerHTML = '';
+  const frag = document.createDocumentFragment();
+  allocs.forEach(a => {
+    const hex = COLOR_HEX[a.color] || '#00d4a8';
+    const tr  = document.createElement('tr');
+    tr.innerHTML = `
+      <td><div class="vlan-name-cell">
+        <span class="vlan-badge" style="background:${hex};width:9px;height:9px;border-radius:50%;display:inline-block;flex-shrink:0"></span>
+        <span>${escH(a.name)}</span>
+      </div></td>
+      <td style="color:var(--text-secondary)">${a.vlanId}</td>
+      <td class="td-net">${a.network}</td>
+      <td>${a.mask}</td>
+      <td>${a.cidr}</td>
+      <td class="td-wc">${a.wildcard}</td>
+      <td class="td-gw">${a.gateway}</td>
+      <td style="font-size:0.7rem;color:var(--text-secondary)">${a.dhcpRange}</td>
+      <td>${a.broadcast}</td>
+      <td style="text-align:right;padding-right:1.25rem">${numComma(a.usable)}</td>
+      <td class="td-notes">${escH(a.note)}</td>
+    `;
+    frag.appendChild(tr);
+  });
+  tbody.appendChild(frag);
+
+  // Summary cards
+  const totalIPs   = allocs.reduce((s,a) => s + a.usable, 0);
+  const largest    = allocs.reduce((m,a) => a.usable > m.usable ? a : m, allocs[0]);
+  const smallest   = allocs.reduce((m,a) => a.usable < m.usable ? a : m, allocs[0]);
+  document.getElementById('sc-summary-strip').innerHTML = `
+    <div class="summary-card"><div class="sc-label">VLANs Planned</div><div class="sc-value">${allocs.length}</div></div>
+    <div class="summary-card"><div class="sc-label">Total Usable IPs</div><div class="sc-value">${numComma(totalIPs)}</div></div>
+    <div class="summary-card"><div class="sc-label">Base Network</div><div class="sc-value small">${document.getElementById('sc-base-ip').value}/${document.getElementById('sc-base-cidr').value}</div></div>
+    <div class="summary-card"><div class="sc-label">Largest Subnet</div><div class="sc-value small">${largest ? largest.name+' '+largest.cidr : '—'}</div></div>
+    <div class="summary-card"><div class="sc-label">Smallest Subnet</div><div class="sc-value small amber">${smallest ? smallest.name+' '+smallest.cidr : '—'}</div></div>
+  `;
+
+  scenarioStep('results');
+}
+
+function exportScenarioCSV() {
+  if (!scenarioResults.length) return;
+  const hdr  = ['VLAN Name','VLAN ID','Network','Subnet Mask','CIDR','Wildcard (Cisco)','Gateway','DHCP Range','Broadcast','Usable Hosts','Notes'];
+  const rows = scenarioResults.map(a =>
+    [a.name, a.vlanId, a.network, a.mask, a.cidr, a.wildcard, a.gateway, a.dhcpRange, a.broadcast, a.usable, a.note]
+  );
+  const csv  = [hdr,...rows].map(r => r.map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = Object.assign(document.createElement('a'), { href:url, download:'network-plan.csv' });
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+
+/* ── Init ─────────────────────────────────────────── */
+refreshCustomCidr();
+</script>
+</body>
+</html>
