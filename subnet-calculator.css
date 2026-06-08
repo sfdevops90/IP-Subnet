@@ -914,8 +914,44 @@ footer {
 .scen-results-table tr:nth-child(even) td { background: rgba(255,255,255,0.018); }
 .scen-results-table tr:nth-child(even):hover td { background: var(--bg-hover); }
 
+/* ── Sticky VLAN Name column ─────────────────────────
+   Solid backgrounds required — content slides under
+   the sticky cell when the table scrolls horizontally */
+.scen-results-table th:first-child,
+.scen-results-table td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  border-right: 1px solid var(--border-bright);
+}
+.scen-results-table th:first-child {
+  background: var(--bg-card);
+}
+.scen-results-table td:first-child {
+  background: var(--bg-panel);
+}
+.scen-results-table tr:nth-child(even) td:first-child {
+  background: #181109; /* bg-panel + even-row tint, must be solid */
+}
+.scen-results-table tr:hover td:first-child,
+.scen-results-table tr:nth-child(even):hover td:first-child {
+  background: var(--bg-hover);
+}
+
 .vlan-name-cell { display: flex; align-items: center; gap: 6px; }
-.td-notes { font-size: 0.67rem; color: var(--text-secondary); max-width: 200px; white-space: normal; line-height: 1.3; }
+
+/* Notes cell — class lives on an inner <div> so max-width is respected */
+.td-notes {
+  font-size: 0.67rem;
+  color: var(--text-secondary);
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  min-width: 140px;
+  max-width: 210px;
+  line-height: 1.45;
+}
+
 .td-net   { color: var(--accent); font-weight: 500; }
 .td-wc    { color: var(--amber); }
 .td-gw    { color: #38bdf8; }

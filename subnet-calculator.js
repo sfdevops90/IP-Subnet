@@ -553,7 +553,7 @@ function renderScenarioResults(allocs) {
       <td style="font-size:0.7rem;color:var(--text-secondary)">${a.dhcpRange}</td>
       <td>${a.broadcast}</td>
       <td style="text-align:right;padding-right:1.25rem">${numComma(a.usable)}</td>
-      <td class="td-notes">${escH(a.note)}</td>
+      <td><div class="td-notes">${escH(a.note)}</div></td>
     `;
     frag.appendChild(tr);
   });
