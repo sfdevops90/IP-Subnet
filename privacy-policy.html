@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Network Sloth</title>
+  <meta name="description" content="Network Sloth privacy policy. Learn how we use cookies, Google AdSense, and what data (very little) we collect.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep:       #0d0a05;
+      --bg-panel:      #161009;
+      --bg-card:       #1d150b;
+      --bg-hover:      #271c0e;
+      --border:        #3a2a14;
+      --border-bright: #56401e;
+      --accent:        #5cb870;
+      --accent-dim:    rgba(92,184,112,0.13);
+      --accent-glow:   rgba(92,184,112,0.32);
+      --amber:         #e8a020;
+      --amber-dim:     rgba(232,160,32,0.13);
+      --red:           #e8505f;
+      --red-dim:       rgba(232,80,95,0.13);
+      --text-primary:  #eddfc0;
+      --text-secondary:#9a7d52;
+      --text-dim:      #4a3818;
+      --font-display:  'Nunito', sans-serif;
+      --font-mono:     'JetBrains Mono', monospace;
+      --font-body:     'Nunito', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-weight: 400;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(92,184,112,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(92,184,112,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 200;
+      height: 58px;
+      background: rgba(13,10,5,0.96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 1.5rem; gap: 1rem;
+    }
+    .logo {
+      font-family: var(--font-display);
+      font-size: 1.25rem; font-weight: 900;
+      letter-spacing: 1px; text-transform: uppercase;
+      color: var(--text-primary);
+      white-space: nowrap; flex-shrink: 0;
+      display: flex; align-items: center; gap: 0.5rem;
+      text-decoration: none;
+    }
+    .logo-icon { font-size: 1.6rem; line-height: 1; }
+    .logo em   { color: var(--accent); font-style: normal; }
+    .nav-badge {
+      font-family: var(--font-mono); font-size: 0.55rem; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--accent); border: 1px solid var(--accent);
+      border-radius: 2px; padding: 2px 5px; margin-left: 8px;
+      vertical-align: middle; opacity: 0.7;
+    }
+    .nav-back {
+      font-family: var(--font-display); font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 1px; text-transform: uppercase;
+      color: var(--text-secondary); text-decoration: none;
+      border: 1px solid var(--border); border-radius: 3px;
+      padding: 0.35rem 0.85rem;
+      transition: all 0.18s;
+    }
+    .nav-back:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+    /* ── HERO ── */
+    .page-hero {
+      position: relative; z-index: 1;
+      background: linear-gradient(135deg, #1c1208 0%, #231a0a 60%, #1a1506 100%);
+      border-bottom: 1px solid var(--border-bright);
+      padding: 2.5rem 2rem;
+      overflow: hidden;
+    }
+    .page-hero::after {
+      content: '🔒';
+      position: absolute; right: 2rem; bottom: -10px;
+      font-size: 6rem; opacity: 0.07; pointer-events: none;
+    }
+    .page-hero-inner { max-width: 780px; margin: 0 auto; }
+    .page-eyebrow {
+      font-family: var(--font-mono); font-size: 0.62rem; font-weight: 600;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.65rem;
+    }
+    .page-hero h1 {
+      font-family: var(--font-display); font-size: 2rem; font-weight: 900;
+      letter-spacing: -0.5px; color: var(--text-primary);
+      margin-bottom: 0.65rem;
+    }
+    .page-hero p {
+      font-size: 0.88rem; color: var(--text-secondary); line-height: 1.65;
+      max-width: 560px;
+    }
+    .last-updated {
+      display: inline-block; margin-top: 1rem;
+      font-family: var(--font-mono); font-size: 0.62rem;
+      color: var(--text-dim); letter-spacing: 1px;
+      border: 1px solid var(--border); border-radius: 3px;
+      padding: 0.25rem 0.65rem;
+    }
+
+    /* ── CONTENT ── */
+    .page-outer {
+      position: relative; z-index: 1;
+      max-width: 780px; margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+
+    .policy-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .policy-section h2 {
+      font-family: var(--font-display);
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.9rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+
+    .policy-section p {
+      font-size: 0.88rem; color: var(--text-secondary);
+      line-height: 1.75; margin-bottom: 0.85rem;
+    }
+    .policy-section p:last-child { margin-bottom: 0; }
+
+    .policy-section ul {
+      list-style: none; padding: 0; margin-bottom: 0.85rem;
+    }
+    .policy-section ul li {
+      font-size: 0.85rem; color: var(--text-secondary);
+      line-height: 1.7; padding: 0.3rem 0 0.3rem 1.2rem;
+      position: relative; border-bottom: 1px solid var(--border);
+    }
+    .policy-section ul li:last-child { border-bottom: none; }
+    .policy-section ul li::before {
+      content: '›';
+      position: absolute; left: 0;
+      color: var(--accent); font-weight: 700;
+    }
+
+    .policy-section a {
+      color: var(--accent); text-decoration: none;
+      border-bottom: 1px solid var(--accent-dim);
+      transition: border-color 0.18s;
+    }
+    .policy-section a:hover { border-color: var(--accent); }
+
+    .info-box {
+      background: var(--bg-card); border: 1px solid var(--border-bright);
+      border-left: 3px solid var(--accent);
+      border-radius: 4px; padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+      font-family: var(--font-mono); font-size: 0.78rem;
+      color: var(--text-secondary); line-height: 1.6;
+    }
+    .info-box strong { color: var(--text-primary); font-weight: 600; }
+
+    .amber-box {
+      background: var(--amber-dim); border: 1px solid var(--amber);
+      border-radius: 4px; padding: 1rem 1.25rem; margin-bottom: 1rem;
+      font-size: 0.82rem; color: var(--amber); line-height: 1.6;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative; z-index: 1;
+      margin-top: 3rem; border-top: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+    }
+    .footer-inner {
+      max-width: 900px; margin: 0 auto;
+      display: flex; flex-direction: column; align-items: center; gap: 1.25rem;
+    }
+    .footer-nav {
+      display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center;
+    }
+    .footer-nav a {
+      font-family: var(--font-mono); font-size: 0.68rem;
+      letter-spacing: 1px; color: var(--text-secondary);
+      text-decoration: none; transition: color 0.18s;
+    }
+    .footer-nav a:hover { color: var(--accent); }
+    .footer-copy {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      color: var(--text-dim); text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 1rem; }
+      .page-hero { padding: 1.75rem 1rem; }
+      .page-hero h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html">
+    <span class="logo-icon">🦥</span>
+    <span>NETWORK <em>SLOTH</em></span>
+    <span class="nav-badge">FREE</span>
+  </a>
+  <a class="nav-back" href="index.html">← Back to Tools</a>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-eyebrow">Legal</div>
+    <h1>Privacy Policy</h1>
+    <p>Network Sloth is a free, browser-based tool for network engineers. We keep data collection to an absolute minimum — most of this page is about Google AdSense cookies, not us tracking you.</p>
+    <span class="last-updated">Last updated: June 2026</span>
+  </div>
+</div>
+
+<div class="page-outer">
+
+  <div class="info-box">
+    <strong>Short version:</strong> Network Sloth doesn't collect your personal data, doesn't require an account, and doesn't store anything you enter into the calculator. Google AdSense places cookies for ad targeting. If you're in the UK/EU, a cookie banner will appear on your first visit.
+  </div>
+
+  <div class="policy-section">
+    <h2>⬡ Who We Are</h2>
+    <p>Network Sloth (networksloth.io) is a free, client-side subnet calculator and network planning tool. All calculations run entirely in your browser — no data is sent to any server operated by us.</p>
+    <p>For privacy enquiries, contact us at: <a href="mailto:privacy@networksloth.io">privacy@networksloth.io</a></p>
+  </div>
+
+  <div class="policy-section">
+    <h2>⬡ Data We Collect</h2>
+    <p>Network Sloth itself collects <strong style="color:var(--text-primary)">no personal data</strong>. Specifically:</p>
+    <ul>
+      <li>IP addresses, subnet inputs, and network plans you enter are processed locally in your browser and are never transmitted to us.</li>
+      <li>We do not require registration, login, or any account.</li>
+      <li>We do not use analytics software (such as Google Analytics) that tracks individual users.</li>
+      <li>CSV exports you generate are created and downloaded entirely client-side.</li>
+    </ul>
+  </div>
+
+  <div class="policy-section">
+    <h2>⬡ Google AdSense & Cookies</h2>
+    <p>We display advertisements served by <strong style="color:var(--text-primary)">Google AdSense</strong>. Google uses cookies to serve ads based on your prior visits to this and other websites. This is the primary reason this Privacy Policy exists.</p>
+    <div class="amber-box">
+      ⚠ Google AdSense and its partners may use cookies to show you personalised ads. You can opt out of personalised advertising at any time via <a href="https://adssettings.google.com" target="_blank" rel="noopener" style="color:var(--amber);border-bottom-color:rgba(232,160,32,0.3)">Google's Ad Settings</a>.
+    </div>
+    <p>Specifically, AdSense cookies may be used to:</p>
+    <ul>
+      <li>Show ads relevant to your interests based on your browsing history.</li>
+      <li>Limit how many times you see the same ad.</li>
+      <li>Measure the effectiveness of advertising campaigns.</li>
+    </ul>
+    <p>For full details on how Google uses data when you use our site, see <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">How Google uses information from sites or apps that use our services</a>.</p>
+  </div>
+
+  <div class="policy-section">
+    <h2>⬡ UK & EU Users (GDPR / UK GDPR)</h2>
+    <p>If you are accessing Network Sloth from the United Kingdom or European Union, you have additional rights under the UK GDPR / EU GDPR:</p>
+    <ul>
+      <li>You have the right to access, correct, or request deletion of any personal data held about you.</li>
+      <li>You have the right to object to or restrict processing of your data.</li>
+      <li>You have the right to withdraw consent for cookie-based advertising at any time.</li>
+    </ul>
+    <p>Because we do not collect personal data ourselves, most of these rights apply to Google's data practices. You can manage Google's use of your data at <a href="https://myaccount.google.com" target="_blank" rel="noopener">myaccount.google.com</a> or opt out of interest-based advertising via <a href="https://www.youronlinechoices.com" target="_blank" rel="noopener">Your Online Choices</a>.</p>
+    <p>To exercise rights relating to any data held by Network Sloth, contact <a href="mailto:privacy@networksloth.io">privacy@networksloth.io</a>.</p>
+  </div>
+
+  <div class="policy-section">
+    <h2>⬡ Third-Party Links</h2>
+    <p>This site may contain links to external websites. Network Sloth is not responsible for the privacy practices or content of those sites. We encourage you to read the privacy policy of any external site you visit.</p>
+  </div>
+
+  <div class="policy-section">
+    <h2>⬡ Children's Privacy</h2>
+    <p>Network Sloth is intended for use by network professionals and IT students. We do not knowingly collect data from children under the age of 13. If you believe a child has provided personal information through this site, please contact us.</p>
+  </div>
+
+  <div class="policy-section">
+    <h2>⬡ Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. The "Last updated" date at the top of this page reflects when the most recent changes were made. Continued use of the site after any changes constitutes acceptance of the updated policy.</p>
+  </div>
+
+  <div class="policy-section">
+    <h2>⬡ Contact</h2>
+    <p>Questions about this policy? Reach us at <a href="mailto:privacy@networksloth.io">privacy@networksloth.io</a> or use the <a href="contact.html">Contact page</a>.</p>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <a class="logo" href="index.html" style="font-size:1rem;text-decoration:none">
+      <span class="logo-icon" style="font-size:1.4rem">🦥</span>
+      <span>NETWORK <em>SLOTH</em></span>
+    </a>
+    <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim);letter-spacing:1px;text-align:center;font-style:italic">
+      "Slow but determined subnetting since 2026"
+    </div>
+    <div class="footer-nav">
+      <a href="about.html">About</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="contact.html">Contact</a>
+      <a href="index.html">Subnet Calculator</a>
+    </div>
+    <div class="footer-copy">
+      © 2026 Network Sloth · Free tools for network engineers · All calculations provided for informational purposes only
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
