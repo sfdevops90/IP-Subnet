@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Network Sloth</title>
+  <meta name="description" content="About Network Sloth — free subnet calculator and network planning tools for network engineers. No sign-up, no nonsense, no backend.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep:       #0d0a05;
+      --bg-panel:      #161009;
+      --bg-card:       #1d150b;
+      --bg-hover:      #271c0e;
+      --border:        #3a2a14;
+      --border-bright: #56401e;
+      --accent:        #5cb870;
+      --accent-dim:    rgba(92,184,112,0.13);
+      --accent-glow:   rgba(92,184,112,0.32);
+      --amber:         #e8a020;
+      --amber-dim:     rgba(232,160,32,0.13);
+      --amber-glow:    rgba(232,160,32,0.28);
+      --red:           #e8505f;
+      --text-primary:  #eddfc0;
+      --text-secondary:#9a7d52;
+      --text-dim:      #4a3818;
+      --font-display:  'Nunito', sans-serif;
+      --font-mono:     'JetBrains Mono', monospace;
+      --font-body:     'Nunito', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(92,184,112,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(92,184,112,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 200;
+      height: 58px;
+      background: rgba(13,10,5,0.96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 1.5rem; gap: 1rem;
+    }
+    .logo {
+      font-family: var(--font-display); font-size: 1.25rem; font-weight: 900;
+      letter-spacing: 1px; text-transform: uppercase;
+      color: var(--text-primary); white-space: nowrap; flex-shrink: 0;
+      display: flex; align-items: center; gap: 0.5rem;
+      text-decoration: none;
+    }
+    .logo-icon { font-size: 1.6rem; line-height: 1; }
+    .logo em   { color: var(--accent); font-style: normal; }
+    .nav-badge {
+      font-family: var(--font-mono); font-size: 0.55rem; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--accent); border: 1px solid var(--accent);
+      border-radius: 2px; padding: 2px 5px; margin-left: 8px;
+      vertical-align: middle; opacity: 0.7;
+    }
+    .nav-back {
+      font-family: var(--font-display); font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 1px; text-transform: uppercase;
+      color: var(--text-secondary); text-decoration: none;
+      border: 1px solid var(--border); border-radius: 3px;
+      padding: 0.35rem 0.85rem; transition: all 0.18s;
+    }
+    .nav-back:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+    /* ── HERO ── */
+    .page-hero {
+      position: relative; z-index: 1;
+      background: linear-gradient(135deg, #1c1208 0%, #231a0a 60%, #1a1506 100%);
+      border-bottom: 1px solid var(--border-bright);
+      padding: 3rem 2rem 2.5rem;
+      overflow: hidden;
+    }
+    .page-hero::after {
+      content: '🦥';
+      position: absolute; right: -10px; bottom: -20px;
+      font-size: 9rem; opacity: 0.07; pointer-events: none;
+      transform: scaleX(-1);
+    }
+    .hero-inner {
+      max-width: 680px; margin: 0 auto;
+      display: flex; align-items: flex-start; gap: 1.5rem; flex-wrap: wrap;
+    }
+    .hero-mascot-lg { font-size: 4.5rem; line-height: 1; flex-shrink: 0; filter: drop-shadow(0 2px 14px rgba(92,184,112,0.35)); }
+    .hero-text-block { flex: 1; min-width: 220px; }
+    .page-eyebrow {
+      font-family: var(--font-mono); font-size: 0.62rem; font-weight: 600;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.65rem;
+    }
+    .page-hero h1 {
+      font-family: var(--font-display); font-size: 2.1rem; font-weight: 900;
+      letter-spacing: -0.5px; color: var(--text-primary); margin-bottom: 0.75rem;
+    }
+    .page-hero p {
+      font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7;
+    }
+
+    /* ── CONTENT ── */
+    .page-outer {
+      position: relative; z-index: 1;
+      max-width: 780px; margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+
+    /* Stat strip */
+    .stat-strip {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1rem; margin-bottom: 2.5rem;
+    }
+    @media (max-width: 520px) { .stat-strip { grid-template-columns: 1fr 1fr; } }
+    .stat-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 5px; padding: 1.25rem 1rem; text-align: center;
+    }
+    .stat-value {
+      font-family: var(--font-mono); font-size: 1.7rem; font-weight: 600;
+      color: var(--accent); display: block; margin-bottom: 0.3rem;
+    }
+    .stat-value.amber { color: var(--amber); }
+    .stat-label {
+      font-family: var(--font-mono); font-size: 0.6rem; font-weight: 600;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    /* Section blocks */
+    .about-section { margin-bottom: 2.5rem; }
+    .about-section h2 {
+      font-family: var(--font-display); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1rem;
+      padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+    }
+    .about-section p {
+      font-size: 0.9rem; color: var(--text-secondary);
+      line-height: 1.75; margin-bottom: 0.85rem;
+    }
+    .about-section p:last-child { margin-bottom: 0; }
+    .about-section a {
+      color: var(--accent); text-decoration: none;
+      border-bottom: 1px solid var(--accent-dim); transition: border-color 0.18s;
+    }
+    .about-section a:hover { border-color: var(--accent); }
+
+    /* Feature list */
+    .feature-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0.75rem; margin-bottom: 0.5rem;
+    }
+    @media (max-width: 520px) { .feature-grid { grid-template-columns: 1fr; } }
+    .feature-item {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 4px; padding: 0.85rem 1rem;
+      display: flex; align-items: flex-start; gap: 0.65rem;
+    }
+    .fi-icon { font-size: 1.2rem; line-height: 1.2; flex-shrink: 0; }
+    .fi-name {
+      font-family: var(--font-display); font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.5px; color: var(--text-primary); margin-bottom: 0.2rem;
+    }
+    .fi-desc { font-size: 0.72rem; color: var(--text-secondary); line-height: 1.5; }
+
+    /* Principles */
+    .principle-list { list-style: none; padding: 0; }
+    .principle-list li {
+      display: flex; gap: 1rem; align-items: flex-start;
+      padding: 0.85rem 0; border-bottom: 1px solid var(--border);
+    }
+    .principle-list li:last-child { border-bottom: none; }
+    .pl-num {
+      font-family: var(--font-mono); font-size: 0.7rem; font-weight: 600;
+      color: var(--accent); flex-shrink: 0; width: 22px; margin-top: 2px;
+    }
+    .pl-text { font-size: 0.87rem; color: var(--text-secondary); line-height: 1.65; }
+    .pl-text strong { color: var(--text-primary); font-weight: 700; }
+
+    /* CTA block */
+    .cta-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border-bright);
+      border-top: 3px solid var(--accent);
+      border-radius: 6px; padding: 1.75rem;
+      text-align: center; margin-top: 2.5rem;
+    }
+    .cta-block p {
+      font-size: 0.88rem; color: var(--text-secondary);
+      line-height: 1.65; margin-bottom: 1.25rem;
+    }
+    .btn-primary {
+      display: inline-block;
+      padding: 0.65rem 2.2rem;
+      background: var(--accent); color: var(--bg-deep);
+      border: none; border-radius: 4px;
+      font-family: var(--font-display); font-size: 0.92rem; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      text-decoration: none; cursor: pointer;
+      transition: all 0.18s;
+    }
+    .btn-primary:hover {
+      background: #00f0c2;
+      box-shadow: 0 0 22px var(--accent-glow);
+      transform: translateY(-1px);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative; z-index: 1;
+      margin-top: 3rem; border-top: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+    }
+    .footer-inner {
+      max-width: 900px; margin: 0 auto;
+      display: flex; flex-direction: column; align-items: center; gap: 1.25rem;
+    }
+    .footer-nav { display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center; }
+    .footer-nav a {
+      font-family: var(--font-mono); font-size: 0.68rem;
+      letter-spacing: 1px; color: var(--text-secondary);
+      text-decoration: none; transition: color 0.18s;
+    }
+    .footer-nav a:hover { color: var(--accent); }
+    .footer-copy { font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-dim); text-align: center; }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 1rem; }
+      .page-hero { padding: 1.75rem 1rem; }
+      .page-hero h1 { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html">
+    <span class="logo-icon">🦥</span>
+    <span>NETWORK <em>SLOTH</em></span>
+    <span class="nav-badge">FREE</span>
+  </a>
+  <a class="nav-back" href="index.html">← Back to Tools</a>
+</nav>
+
+<div class="page-hero">
+  <div class="hero-inner">
+    <div class="hero-mascot-lg">🦥</div>
+    <div class="hero-text-block">
+      <div class="page-eyebrow">About Network Sloth</div>
+      <h1>Slow but determined.</h1>
+      <p>Free subnet tools for network engineers who'd rather be configuring switches than hunting for a half-decent calculator that doesn't require an account.</p>
+    </div>
+  </div>
+</div>
+
+<div class="page-outer">
+
+  <div class="stat-strip">
+    <div class="stat-card">
+      <span class="stat-value">100%</span>
+      <span class="stat-label">Client-side</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value">0</span>
+      <span class="stat-label">Accounts required</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value amber">Free</span>
+      <span class="stat-label">Always</span>
+    </div>
+  </div>
+
+  <div class="about-section">
+    <h2>⬡ What Is Network Sloth?</h2>
+    <p>Network Sloth is a free, browser-based toolkit for network engineers and IT professionals. It started as a simple CIDR calculator and has grown into a proper planning tool — subnet calculator, VLSM scenario planner, DHCP generator, firewall rules builder, and more on the way.</p>
+    <p>Everything runs entirely in your browser. No backend, no server, no sign-up. You enter a network range, the sloth does the maths, you get your subnets. That's the whole deal.</p>
+  </div>
+
+  <div class="about-section">
+    <h2>⬡ What's In the Toolkit</h2>
+    <div class="feature-grid">
+      <div class="feature-item">
+        <div class="fi-icon">⬡</div>
+        <div>
+          <div class="fi-name">Subnet Calculator</div>
+          <div class="fi-desc">CIDR breakdown with subnet masks, wildcard masks, host ranges, and broadcast addresses. Export to CSV.</div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="fi-icon">🏢</div>
+        <div>
+          <div class="fi-name">Scenario Planner</div>
+          <div class="fi-desc">Pre-built real-world scenarios — SMB, enterprise, data centre, home lab. Automatic VLSM allocation across your VLANs.</div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="fi-icon">🔥</div>
+        <div>
+          <div class="fi-name">Firewall Rules Generator</div>
+          <div class="fi-desc">Generate ACLs and policy configs for Cisco IOS, pfSense/OPNsense, and Juniper from your subnet plan.</div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="fi-icon">📡</div>
+        <div>
+          <div class="fi-name">DHCP Scope Generator</div>
+          <div class="fi-desc">Ready-to-paste DHCP config for Cisco IOS, Windows Server, ISC DHCP, Kea, and MikroTik RouterOS.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="about-section">
+    <h2>⬡ Our Principles</h2>
+    <ul class="principle-list">
+      <li>
+        <span class="pl-num">01</span>
+        <span class="pl-text"><strong>Free, always.</strong> Network Sloth will always have a free tier. The tools are funded by non-intrusive advertising, not paywalls or freemium subscriptions.</span>
+      </li>
+      <li>
+        <span class="pl-num">02</span>
+        <span class="pl-text"><strong>No backend.</strong> Everything runs client-side in your browser. Nothing you type into a subnet field or VLAN editor is ever sent to a server.</span>
+      </li>
+      <li>
+        <span class="pl-num">03</span>
+        <span class="pl-text"><strong>No fluff.</strong> Tools designed for engineers who know what they want. No tutorial wizards, no onboarding flows, no "book a demo" popups.</span>
+      </li>
+      <li>
+        <span class="pl-num">04</span>
+        <span class="pl-text"><strong>Multi-platform output.</strong> Wherever possible, config output targets real platforms — Cisco IOS, Juniper, pfSense, Windows Server, MikroTik — not generic pseudocode.</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="about-section">
+    <h2>⬡ Supported Platforms</h2>
+    <p>Network Sloth currently generates platform-specific configuration output for:</p>
+    <p style="font-family:var(--font-mono);font-size:0.78rem;color:var(--accent);line-height:2;letter-spacing:0.5px">
+      Cisco IOS &nbsp;·&nbsp; pfSense / OPNsense &nbsp;·&nbsp; Juniper JunOS &nbsp;·&nbsp;
+      Windows Server (PowerShell) &nbsp;·&nbsp; ISC DHCP &nbsp;·&nbsp; Kea DHCP4 &nbsp;·&nbsp; MikroTik RouterOS
+    </p>
+    <p>More platforms are added with each release. If your platform isn't listed, <a href="contact.html">get in touch</a>.</p>
+  </div>
+
+  <div class="cta-block">
+    <p>Ready to stop doing subnet maths in your head? The calculator is right there, it takes about ten seconds, and the sloth won't judge you for using a /26 when a /27 would have done.</p>
+    <a class="btn-primary" href="index.html">▶ Open the Calculator</a>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <a class="logo" href="index.html" style="font-size:1rem;text-decoration:none">
+      <span class="logo-icon" style="font-size:1.4rem">🦥</span>
+      <span>NETWORK <em>SLOTH</em></span>
+    </a>
+    <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim);letter-spacing:1px;text-align:center;font-style:italic">
+      "Slow but determined subnetting since 2026"
+    </div>
+    <div class="footer-nav">
+      <a href="about.html">About</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="contact.html">Contact</a>
+      <a href="index.html">Subnet Calculator</a>
+    </div>
+    <div class="footer-copy">
+      © 2026 Network Sloth · Free tools for network engineers · All calculations provided for informational purposes only
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
