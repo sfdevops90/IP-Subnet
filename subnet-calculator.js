@@ -288,9 +288,29 @@ function exportCSV() {
 
 /* ── Scenario Planner ─────────────────────────────── */
 const COLOR_HEX = {
-  green:'#22c55e', amber:'#f5a623', blue:'#38bdf8',
-  red:'#ff4d6d', purple:'#a78bfa', orange:'#fb923c', teal:'#2dd4bf'
+  green:'#22c55e',  amber:'#f5a623',  blue:'#38bdf8',
+  red:'#ff4d6d',    purple:'#a78bfa', orange:'#fb923c',
+  teal:'#2dd4bf',   pink:'#f472b6',   cyan:'#22d3ee',
+  lime:'#84cc16',   indigo:'#6366f1', yellow:'#eab308',
+  slate:'#94a3b8',  rose:'#fb7185'
 };
+
+/* Render a swatch dot-picker; value stored in a hidden input */
+function swatchPickerHTML(selected) {
+  const dots = Object.entries(COLOR_HEX).map(([name, hex]) =>
+    `<span class="swatch-dot${name===selected?' active':''}" data-color="${name}"
+           style="background:${hex}" onclick="pickSwatch(this)"
+           title="${name.charAt(0).toUpperCase()+name.slice(1)}"></span>`
+  ).join('');
+  return `<div class="swatch-picker"><input type="hidden" class="swatch-val" value="${selected}">${dots}</div>`;
+}
+
+function pickSwatch(dot) {
+  const picker = dot.closest('.swatch-picker');
+  picker.querySelectorAll('.swatch-dot').forEach(d => d.classList.remove('active'));
+  dot.classList.add('active');
+  picker.querySelector('.swatch-val').value = dot.dataset.color;
+}
 
 const SCENARIOS = {
   'small-corp': {
@@ -418,17 +438,10 @@ function addVlanRow(data) {
   const tbody  = document.getElementById('vlan-editor-tbody');
   const colors = Object.keys(COLOR_HEX);
   const color  = data ? data.color : colors[tbody.rows.length % colors.length];
-  const opts   = colors.map(c =>
-    `<option value="${c}" ${c === color ? 'selected':''}>${c.charAt(0).toUpperCase()+c.slice(1)}</option>`
-  ).join('');
 
   const tr = document.createElement('tr');
   tr.innerHTML = `
-    <td>
-      <select class="vi w-color" onchange="syncBadge(this)">
-        ${opts}
-      </select>
-    </td>
+    <td style="vertical-align:middle">${swatchPickerHTML(color)}</td>
     <td><input  type="text"   class="vi w-name"  value="${data ? escH(data.name)  : ''}" placeholder="e.g. Staff LAN"></td>
     <td><input  type="number" class="vi w-id"    value="${data ? data.id    : ''}" placeholder="10"  min="1" max="4094"></td>
     <td><input  type="number" class="vi w-hosts" value="${data ? data.hosts : ''}" placeholder="50"  min="1"></td>
@@ -742,12 +755,11 @@ function addFwVlan(data) {
   const tbody  = document.getElementById('fw-vlan-tbody');
   const colors = Object.keys(COLOR_HEX);
   const color  = data ? (data.color || 'green') : colors[tbody.rows.length % colors.length];
-  const opts   = colors.map(c => `<option value="${c}"${c===color?' selected':''}>${c.charAt(0).toUpperCase()+c.slice(1)}</option>`).join('');
   const zones  = ['lan','dmz','guest','management','server','iot','wan'];
   const zOpts  = zones.map(z => `<option value="${z}"${(data&&data.zone===z)?' selected':''}>${z.charAt(0).toUpperCase()+z.slice(1)}</option>`).join('');
   const tr = document.createElement('tr');
   tr.innerHTML = `
-    <td><select class="vi" style="max-width:88px">${opts}</select></td>
+    <td style="vertical-align:middle">${swatchPickerHTML(color)}</td>
     <td><input type="text"   class="vi" style="min-width:120px" value="${data?escH(data.name||''):''}" placeholder="e.g. Staff LAN"></td>
     <td><input type="text"   class="vi" style="min-width:140px" value="${data?escH(data.networkCidr||''):''}" placeholder="192.168.10.0/24"></td>
     <td><input type="number" class="vi" style="max-width:62px"  value="${data&&data.vlanId?data.vlanId:''}" placeholder="10" min="1" max="4094"></td>
