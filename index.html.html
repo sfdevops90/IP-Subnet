@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ── Primary SEO ───────────────────────────────────── -->
+  <title>Free Subnet Calculator — CIDR, VLSM &amp; Wildcard Mask Tool | Network Sloth</title>
+  <meta name="description" content="Free online subnet calculator for network engineers. Calculate CIDR subnets, Cisco wildcard masks, VLSM plans, DHCP scopes and firewall rules — no sign-up required.">
+  <meta name="keywords" content="subnet calculator, CIDR calculator, wildcard mask calculator, VLSM calculator, IP subnet calculator, Cisco subnetting, DHCP scope generator, firewall rule generator, network planning tool, subnetting tool">
+  <meta name="author" content="Network Sloth">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#0d0a05">
+  <link rel="canonical" href="https://networksloth.io/">
+
+  <!-- ── Open Graph (Facebook / LinkedIn) ─────────────── -->
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://networksloth.io/">
+  <meta property="og:site_name"   content="Network Sloth">
+  <meta property="og:title"       content="Free Subnet Calculator — CIDR, VLSM &amp; Wildcard Mask Tool">
+  <meta property="og:description" content="Calculate CIDR subnets, Cisco wildcard masks, VLSM network plans, DHCP scopes and firewall ACLs — free, no sign-up, no nonsense.">
+  <meta property="og:image"       content="https://networksloth.io/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height"content="630">
+  <meta property="og:locale"      content="en_GB">
+
+  <!-- ── Twitter / X Card ─────────────────────────────── -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:site"        content="@networksloth">
+  <meta name="twitter:title"       content="Free Subnet Calculator | Network Sloth">
+  <meta name="twitter:description" content="CIDR, VLSM, wildcard masks, DHCP scopes and firewall rules — free tools for network engineers.">
+  <meta name="twitter:image"       content="https://networksloth.io/og-image.png">
+
+  <!-- ── JSON-LD Structured Data ──────────────────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://networksloth.io/#website",
+        "url": "https://networksloth.io/",
+        "name": "Network Sloth",
+        "description": "Free subnet calculator and network planning tools for network engineers",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://networksloth.io/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://networksloth.io/#app",
+        "name": "Network Sloth Subnet Calculator",
+        "url": "https://networksloth.io/",
+        "applicationCategory": "NetworkingApplication",
+        "operatingSystem": "Any (Web Browser)",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" },
+        "description": "Free online subnet calculator supporting CIDR notation, VLSM planning, Cisco wildcard masks, DHCP scope generation for Cisco IOS, Windows Server, ISC DHCP, Kea and MikroTik, plus firewall rule generation for Cisco IOS ACL, pfSense, OPNsense and Juniper.",
+        "featureList": [
+          "CIDR subnet calculator",
+          "VLSM network planner",
+          "Cisco wildcard mask calculator",
+          "DHCP scope generator — Cisco, Windows Server, ISC DHCP, Kea, MikroTik",
+          "Firewall rule generator — Cisco IOS ACL, pfSense, OPNsense, Juniper",
+          "CSV export",
+          "Scenario-based network planning"
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://networksloth.io/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is CIDR notation?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "CIDR (Classless Inter-Domain Routing) notation expresses an IP address and its associated network prefix as a single string, such as 192.168.1.0/24. The number after the slash is the prefix length — it tells you how many bits are in the network portion of the address. A /24 gives 256 addresses (254 usable hosts), a /25 gives 128 addresses, and so on."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is a wildcard mask and how does it differ from a subnet mask?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A subnet mask uses 1s to represent the network portion of an IP address (e.g. 255.255.255.0 for a /24). A wildcard mask is the inverse — 0s represent the network bits and 1s represent the host bits (e.g. 0.0.0.255 for a /24). Wildcard masks are used in Cisco IOS access control lists (ACLs) and OSPF configurations to define which parts of an address must match."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is VLSM and why is it used?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "VLSM (Variable Length Subnet Masking) allows a single network block to be divided into subnets of different sizes. Rather than giving every VLAN the same subnet size, VLSM allocates exactly the address space each segment needs — a /30 for a point-to-point WAN link, a /25 for a large office VLAN, and a /28 for a small server segment — minimising wasted IP addresses."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I calculate the number of subnets and hosts?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The number of subnets created by borrowing n bits from the host portion is 2^n. The number of usable hosts in a subnet is 2^h - 2, where h is the number of host bits remaining (subtracting 2 for the network address and broadcast address). For example, a /26 borrows 2 bits from a /24, giving 4 subnets each with 62 usable hosts (2^6 - 2 = 62)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which platforms does the DHCP scope generator support?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The Network Sloth DHCP scope generator produces ready-to-paste configuration for Cisco IOS (ip dhcp pool), Windows Server DHCP (PowerShell Add-DhcpServerv4Scope), ISC DHCP (dhcpd.conf), Kea DHCP4 (JSON), and MikroTik RouterOS."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which platforms does the firewall rule generator support?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The firewall rule generator outputs Cisco IOS named extended ACLs, pfSense and OPNsense firewall rules in XML format, and Juniper EX/QFX firewall filters. Three policy presets are available: Strict (deny all inter-VLAN traffic), Relaxed (permit all), and Custom (define your own rules by source, destination, protocol and port)."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="subnet-calculator.css">
+</head>
+<body>
+
+<!-- ── NAVIGATION ─────────────────────────────────────── -->
+<nav>
+  <div class="logo">
+    <span class="logo-icon">🦥</span>
+    <span>NETWORK <em>SLOTH</em></span>
+    <span class="nav-badge">FREE</span>
+  </div>
+</nav>
+
+<!-- ── HERO STRIP ──────────────────────────────────────── -->
+<div class="hero-strip">
+  <div class="hero-mascot">🦥</div>
+  <div class="hero-text">
+  <h1 class="hero-title">Stop struggling with subnets. Let the sloth do the maths.</h1>
+    <p class="hero-sub">Free subnet calculator &amp; network planner — no sign-up, no nonsense. <em style="color:var(--amber)">Slow but determined.</em></p>
+  </div>
+  <div class="hero-pills">
+    <span class="hero-pill">✓ CIDR Calculator</span>
+    <span class="hero-pill">✓ Cisco Wildcard</span>
+    <span class="hero-pill">✓ Scenario Planner</span>
+    <span class="hero-pill">✓ VLSM Engine</span>
+    <span class="hero-pill">✓ CSV Export</span>
+  </div>
+</div>
+
+<main id="main-content">
+<div class="page-outer">
+
+  <!-- ── TOP AD ──────────────────────────────────────── -->
+  <div class="ad-zone ad-leaderboard">
+    <!--  REPLACE: Google AdSense 728×90 Leaderboard  -->
+    ADVERTISEMENT · 728×90 LEADERBOARD<br>
+    <span style="font-size:0.55rem;opacity:0.6;">Insert AdSense / Affiliate banner code here</span>
+  </div>
+
+  <div class="main-grid">
+
+    <!-- ── LEFT SIDEBAR ────────────────────────────── -->
+    <div class="sidebar-col">
+      <div class="ad-zone ad-sidebar-box">
+        <!--  REPLACE: 160×280 Rectangle  -->
+        AD<br>160×280<br>Rectangle<br><br>
+        <span style="font-size:0.55rem;opacity:0.6">AdSense / Affiliate</span>
+      </div>
+      <div class="ad-zone ad-sidebar-box">
+        <!--  REPLACE: 160×280  -->
+        AD<br>160×280<br>Rectangle
+      </div>
+    </div>
+
+    <!-- ── MAIN CONTENT ─────────────────────────────── -->
+    <div id="main-col">
+
+      <!-- TAB SWITCHER -->
+      <div class="tab-switcher">
+        <button class="tab-btn active" id="tab-btn-manual"   onclick="switchTab('manual')">⬡ Manual Calc</button>
+        <button class="tab-btn"        id="tab-btn-scenario" onclick="switchTab('scenario')">🏢 Scenario Planner</button>
+        <button class="tab-btn"        id="tab-btn-firewall" onclick="switchTab('firewall')">🔒 Firewall Rules</button>
+        <button class="tab-btn"        id="tab-btn-dhcp"     onclick="switchTab('dhcp')">📋 DHCP Generator</button>
+      </div>
+
+      <!-- ══ MANUAL CALCULATOR TAB ══ -->
+      <div id="tab-manual">
+
+      <!-- INPUT PANEL -->
+      <div class="panel" id="input-panel">
+        <div class="panel-header">
+          <div class="dot dot-green"></div>
+          <div class="panel-title">Subnet Calculator</div>
+        </div>
+        <div class="panel-body">
+
+          <div class="input-row">
+
+            <!-- IP Address -->
+            <div class="field">
+              <div class="field-label">Network IP Address</div>
+              <input type="text" id="ip-input" placeholder="192.168.1.0" value="192.168.1.0" spellcheck="false">
+            </div>
+
+            <!-- Base CIDR -->
+            <div class="field">
+              <div class="field-label">Base Network Prefix</div>
+              <select id="cidr-select">
+                <option value="8">/8   —  255.0.0.0</option>
+                <option value="9">/9   —  255.128.0.0</option>
+                <option value="10">/10  —  255.192.0.0</option>
+                <option value="11">/11  —  255.224.0.0</option>
+                <option value="12">/12  —  255.240.0.0</option>
+                <option value="13">/13  —  255.248.0.0</option>
+                <option value="14">/14  —  255.252.0.0</option>
+                <option value="15">/15  —  255.254.0.0</option>
+                <option value="16">/16  —  255.255.0.0</option>
+                <option value="17">/17  —  255.255.128.0</option>
+                <option value="18">/18  —  255.255.192.0</option>
+                <option value="19">/19  —  255.255.224.0</option>
+                <option value="20">/20  —  255.255.240.0</option>
+                <option value="21">/21  —  255.255.248.0</option>
+                <option value="22">/22  —  255.255.252.0</option>
+                <option value="23">/23  —  255.255.254.0</option>
+                <option value="24" selected>/24  —  255.255.255.0</option>
+                <option value="25">/25  —  255.255.255.128</option>
+                <option value="26">/26  —  255.255.255.192</option>
+                <option value="27">/27  —  255.255.255.224</option>
+                <option value="28">/28  —  255.255.255.240</option>
+                <option value="29">/29  —  255.255.255.248</option>
+                <option value="30">/30  —  255.255.255.252</option>
+              </select>
+            </div>
+
+            <!-- Mode -->
+            <div class="field">
+              <div class="field-label">Calculation Mode</div>
+              <div class="mode-toggle">
+                <button class="mode-btn active" id="btn-mode-subnets" onclick="setMode('subnets')">Subnets</button>
+                <button class="mode-btn" id="btn-mode-hosts"   onclick="setMode('hosts')">Hosts</button>
+                <button class="mode-btn" id="btn-mode-custom"  onclick="setMode('custom')">Custom</button>
+              </div>
+            </div>
+
+            <!-- Dynamic value input -->
+            <div class="field" id="value-field">
+              <div class="field-label" id="value-label">Subnets Required</div>
+              <input type="number" id="value-input" placeholder="4" min="1">
+            </div>
+
+          </div>
+
+          <!-- Custom CIDR row (hidden by default) -->
+          <div id="custom-row" style="display:none; margin-top:1rem;">
+            <div class="field" style="max-width:270px">
+              <div class="field-label">New Subnet CIDR</div>
+              <select id="custom-cidr-sel"></select>
+            </div>
+          </div>
+
+          <!-- Error -->
+          <div class="error-bar" id="error-bar">
+            <span>⚠</span><span id="error-text"></span>
+          </div>
+
+          <!-- Actions -->
+          <div class="action-row">
+            <button class="btn-primary" onclick="calculate()">▶&nbsp; Calculate</button>
+            <button class="btn-ghost"   onclick="resetAll()">Reset</button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RESULTS SECTION (hidden until calc) -->
+      <div id="results-section" style="display:none">
+
+        <!-- Summary cards -->
+        <div class="summary-strip" id="summary-strip"></div>
+
+        <!-- Table panel -->
+        <div class="panel table-panel">
+          <div class="table-toolbar">
+            <div class="result-count" id="result-count"></div>
+            <button class="btn-export" onclick="exportCSV()">⬇ Export CSV</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Network Address</th>
+                  <th>Subnet Mask</th>
+                  <th>CIDR</th>
+                  <th class="col-wc">Wildcard Mask <span style="font-family:var(--font-mono);font-size:0.58rem;letter-spacing:0;opacity:0.7">(Cisco)</span></th>
+                  <th>First Host</th>
+                  <th>Last Host</th>
+                  <th>Broadcast</th>
+                  <th style="text-align:right;padding-right:1.25rem">Usable Hosts</th>
+                </tr>
+              </thead>
+              <tbody id="results-tbody"></tbody>
+            </table>
+          </div>
+          <div id="truncation-notice" class="truncation-notice" style="display:none"></div>
+        </div>
+
+      </div>
+
+      <!-- EMPTY STATE -->
+      <div class="panel" id="empty-panel">
+        <div class="empty-state">
+          <div class="empty-icon">⬡</div>
+          <div class="empty-title">Awaiting Input</div>
+          <div class="empty-sub">Enter your network details above and click Calculate</div>
+        </div>
+      </div>
+
+      <!-- AFFILIATE STRIP -->
+      <div class="affiliate-strip">
+        <div class="aff-label">Recommended</div>
+        <div class="aff-links">
+          <!--  REPLACE each href with your affiliate links  -->
+          <a class="aff-link" href="#" title="Affiliate link — replace with your URL">🔌 Cisco Training</a>
+          <a class="aff-link" href="#" title="Affiliate link — replace with your URL">📚 CompTIA Network+</a>
+          <a class="aff-link" href="#" title="Affiliate link — replace with your URL">🛡 Managed Hosting</a>
+          <a class="aff-link" href="#" title="Affiliate link — replace with your URL">📡 Network Gear</a>
+        </div>
+      </div>
+
+      <!-- QUICK REFERENCE TABLES -->
+      <div class="ref-section">
+        <div class="panel" style="margin-bottom:0.5rem">
+          <div class="panel-header">
+            <div class="dot dot-amber"></div>
+            <div class="panel-title">Quick Reference — CIDR / Subnet Cheat Sheet</div>
+          </div>
+          <div class="panel-body" style="padding:0">
+            <div class="ref-grid" style="padding:1rem;gap:1rem">
+
+              <div class="ref-table-wrap">
+                <table class="ref-table">
+                  <thead><tr><th>CIDR</th><th>Subnet Mask</th><th>Wildcard</th><th>Hosts</th></tr></thead>
+                  <tbody id="ref-tbody-a"></tbody>
+                </table>
+              </div>
+
+              <div class="ref-table-wrap">
+                <table class="ref-table">
+                  <thead><tr><th>CIDR</th><th>Subnet Mask</th><th>Wildcard</th><th>Hosts</th></tr></thead>
+                  <tbody id="ref-tbody-b"></tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      </div><!-- /tab-manual -->
+
+      <!-- ══ SCENARIO PLANNER TAB ══ -->
+      <div id="tab-scenario" style="display:none">
+
+        <!-- STEP 1: PICK SCENARIO -->
+        <div id="sc-step-picker">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="dot dot-green"></div>
+              <div class="panel-title">Choose a Real-World Scenario</div>
+            </div>
+            <div class="panel-body">
+              <p style="font-size:0.78rem;color:var(--text-secondary);margin-bottom:1.1rem;line-height:1.5">
+                Pick a network template below. Each scenario pre-loads a set of VLANs you can edit — then click <strong style="color:var(--accent)">Build Network Plan</strong> to auto-allocate optimised subnets using VLSM.
+              </p>
+              <div class="scenario-grid" id="scenario-grid"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: EDIT VLANs -->
+        <div id="sc-step-editor" style="display:none">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="dot dot-amber"></div>
+              <div class="panel-title" id="sce-panel-title">Configure VLANs</div>
+            </div>
+            <div class="panel-body">
+
+              <div class="sce-header">
+                <div>
+                  <div class="sce-title"    id="sce-title"></div>
+                  <div class="sce-subdesc"  id="sce-subdesc"></div>
+                </div>
+                <button class="btn-back" onclick="scenarioStep('picker')">← Scenarios</button>
+              </div>
+
+              <div class="vlan-table-wrap">
+                <table class="vlan-editor" id="vlan-editor-table">
+                  <thead>
+                    <tr>
+                      <th style="width:96px">Colour</th>
+                      <th>VLAN Name / Purpose</th>
+                      <th>VLAN ID</th>
+                      <th>Hosts Needed</th>
+                      <th>Cisco / Notes</th>
+                      <th style="width:30px"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="vlan-editor-tbody"></tbody>
+                </table>
+              </div>
+
+              <button class="btn-add-vlan" onclick="addVlanRow(null)" style="margin-bottom:1.5rem">+ Add VLAN</button>
+
+              <div class="base-row">
+                <div class="field">
+                  <div class="field-label">Base Network IP</div>
+                  <input type="text" id="sc-base-ip" class="vi" style="width:155px" spellcheck="false" placeholder="10.0.0.0">
+                </div>
+                <div class="field">
+                  <div class="field-label">Base Prefix</div>
+                  <select id="sc-base-cidr" class="vi" style="width:185px;cursor:pointer">
+                    <option value="8">/8  — 255.0.0.0</option>
+                    <option value="16" selected>/16 — 255.255.0.0</option>
+                    <option value="20">/20 — 255.255.240.0</option>
+                    <option value="24">/24 — 255.255.255.0</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="error-bar" id="sc-error-bar" style="margin-top:1rem">
+                <span>⚠</span><span id="sc-error-text"></span>
+              </div>
+
+              <div class="action-row">
+                <button class="btn-primary" onclick="buildNetworkPlan()">⬡ Build Network Plan</button>
+                <button class="btn-ghost"   onclick="scenarioStep('picker')">← Back</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: RESULTS -->
+        <div id="sc-step-results" style="display:none">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="dot dot-green"></div>
+              <div class="panel-title" id="sc-results-title">Network Allocation Plan</div>
+            </div>
+            <div class="table-toolbar">
+              <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+                <button class="btn-back" onclick="scenarioStep('editor')">← Edit VLANs</button>
+                <div class="result-count" id="sc-result-count"></div>
+              </div>
+              <button class="btn-export" onclick="exportScenarioCSV()">⬇ Export CSV</button>
+            </div>
+            <div class="table-wrap">
+              <table class="scen-results-table">
+                <thead>
+                  <tr>
+                    <th>VLAN Name</th>
+                    <th>VLAN ID</th>
+                    <th>Network Address</th>
+                    <th>Subnet Mask</th>
+                    <th>CIDR</th>
+                    <th class="wc-col">Wildcard (Cisco)</th>
+                    <th>Gateway</th>
+                    <th>DHCP Range</th>
+                    <th>Broadcast</th>
+                    <th style="text-align:right;padding-right:1.25rem">Usable Hosts</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody id="sc-results-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="summary-strip" id="sc-summary-strip" style="margin-top:1rem"></div>
+        </div>
+
+      </div><!-- /tab-scenario -->
+
+      <!-- ══ FIREWALL RULES TAB ══ -->
+      <div id="tab-firewall" style="display:none">
+
+        <!-- Panel 1 — Network Definition -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="dot dot-green"></div>
+            <div class="panel-title">Define Networks / VLANs</div>
+          </div>
+          <div class="panel-body">
+            <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;margin-bottom:1rem">
+              <button class="btn-import" onclick="importScenarioToFW()">⬇ Import from Scenario Planner</button>
+              <span style="font-family:var(--font-mono);font-size:0.67rem;color:var(--text-dim)">Enter networks below or import from a scenario result</span>
+            </div>
+            <div style="overflow-x:auto;margin-bottom:1rem">
+              <table class="vlan-editor" id="fw-vlan-table">
+                <thead><tr>
+                  <th style="width:90px">Colour</th>
+                  <th>Name / Role</th>
+                  <th>Network / CIDR</th>
+                  <th>VLAN ID</th>
+                  <th>Zone</th>
+                  <th style="width:30px"></th>
+                </tr></thead>
+                <tbody id="fw-vlan-tbody"></tbody>
+              </table>
+            </div>
+            <button class="btn-add-vlan" onclick="addFwVlan(null)">+ Add Network</button>
+          </div>
+        </div>
+
+        <!-- Panel 2 — Policy + Platform -->
+        <div class="panel" style="margin-top:1rem">
+          <div class="panel-header">
+            <div class="dot dot-amber"></div>
+            <div class="panel-title">Policy Preset &amp; Platform</div>
+          </div>
+          <div class="panel-body">
+
+            <!-- Preset selector -->
+            <div style="margin-bottom:1.25rem">
+              <div class="field-label" style="margin-bottom:0.55rem">Policy Preset</div>
+              <div class="preset-toggle">
+                <button class="preset-btn active" id="fw-preset-strict"  onclick="setFwPreset('strict')">
+                  🔒 Strict<span class="preset-desc">Deny all inter-VLAN; permit internet per VLAN</span>
+                </button>
+                <button class="preset-btn" id="fw-preset-relaxed" onclick="setFwPreset('relaxed')">
+                  🌐 Relaxed<span class="preset-desc">Permit all traffic from each VLAN</span>
+                </button>
+                <button class="preset-btn" id="fw-preset-custom"  onclick="setFwPreset('custom')">
+                  ⚙ Custom<span class="preset-desc">Build rules manually below</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Custom rule builder (hidden unless Custom selected) -->
+            <div id="fw-custom-rules" style="display:none;margin-bottom:1.25rem">
+              <div class="field-label" style="margin-bottom:0.55rem">Custom Rules <span style="color:var(--text-dim);font-weight:400;text-transform:none;letter-spacing:0">(evaluated top-down)</span></div>
+              <div style="overflow-x:auto;margin-bottom:0.75rem">
+                <table class="vlan-editor" id="fw-rules-table">
+                  <thead><tr>
+                    <th style="width:80px">Action</th>
+                    <th>Source</th>
+                    <th>Destination</th>
+                    <th style="width:70px">Protocol</th>
+                    <th style="width:80px">Port</th>
+                    <th>Description</th>
+                    <th style="width:30px"></th>
+                  </tr></thead>
+                  <tbody id="fw-rules-tbody"></tbody>
+                </table>
+              </div>
+              <button class="btn-add-vlan" onclick="addFwRule()">+ Add Rule</button>
+            </div>
+
+            <!-- Platform selector -->
+            <div style="margin-bottom:1.25rem">
+              <div class="field-label" style="margin-bottom:0.55rem">Output Platform</div>
+              <div class="platform-tabs" id="fw-platform-tabs">
+                <button class="platform-tab active" onclick="setFwPlatform('cisco-ios',this)">Cisco IOS ACL</button>
+                <button class="platform-tab"        onclick="setFwPlatform('pfsense',this)">pfSense / OPNsense XML</button>
+                <button class="platform-tab"        onclick="setFwPlatform('juniper',this)">Juniper Firewall Filter</button>
+              </div>
+            </div>
+
+            <div class="error-bar" id="fw-error-bar"><span>⚠</span><span id="fw-error-text"></span></div>
+            <div class="action-row">
+              <button class="btn-primary" onclick="generateFWRules()">🔒&nbsp; Generate Rules</button>
+              <button class="btn-ghost"   onclick="resetFW()">Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Output panel -->
+        <div id="fw-output-section" style="display:none;margin-top:1rem">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="dot dot-green"></div>
+              <div class="panel-title" id="fw-output-title">Generated Firewall Rules</div>
+            </div>
+            <div class="panel-body" style="padding:0">
+              <div class="code-output">
+                <div class="code-toolbar">
+                  <span class="code-lang-badge" id="fw-code-badge">CISCO IOS ACL</span>
+                  <button class="btn-copy" onclick="copyCode('fw-code-pre',this)">⎘ Copy</button>
+                </div>
+                <pre class="code-block" id="fw-code-pre"></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /tab-firewall -->
+
+      <!-- ══ DHCP GENERATOR TAB ══ -->
+      <div id="tab-dhcp" style="display:none">
+
+        <!-- Panel 1 — Subnet Definition -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="dot dot-green"></div>
+            <div class="panel-title">Define Scopes / Subnets</div>
+          </div>
+          <div class="panel-body">
+            <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.25rem">
+              <button class="btn-import" onclick="importScenarioToDHCP()">⬇ Import from Scenario Planner</button>
+              <button class="btn-import" onclick="importCalcToDHCP()">⬇ Import from Calculator</button>
+            </div>
+
+            <!-- Global defaults -->
+            <div class="defaults-grid">
+              <div class="field">
+                <div class="field-label">Default DNS Server 1</div>
+                <input type="text" id="dhcp-dns1" class="vi" placeholder="8.8.8.8" value="8.8.8.8">
+              </div>
+              <div class="field">
+                <div class="field-label">Default DNS Server 2</div>
+                <input type="text" id="dhcp-dns2" class="vi" placeholder="8.8.4.4" value="8.8.4.4">
+              </div>
+              <div class="field">
+                <div class="field-label">Default Domain</div>
+                <input type="text" id="dhcp-domain" class="vi" placeholder="corp.local">
+              </div>
+              <div class="field">
+                <div class="field-label">Default Lease (days)</div>
+                <input type="number" id="dhcp-lease" class="vi" value="1" min="1" max="365">
+              </div>
+            </div>
+
+            <!-- Subnet table -->
+            <div style="overflow-x:auto;margin-bottom:1rem">
+              <table class="vlan-editor" id="dhcp-table">
+                <thead><tr>
+                  <th>Pool / Scope Name</th>
+                  <th>Network / CIDR</th>
+                  <th>Gateway</th>
+                  <th>DNS 1</th>
+                  <th>DNS 2</th>
+                  <th>Domain</th>
+                  <th>Excl. Start</th>
+                  <th>Excl. End</th>
+                  <th style="width:55px">Lease (d)</th>
+                  <th style="width:30px"></th>
+                </tr></thead>
+                <tbody id="dhcp-tbody"></tbody>
+              </table>
+            </div>
+            <button class="btn-add-vlan" onclick="addDhcpRow(null)">+ Add Subnet</button>
+          </div>
+        </div>
+
+        <!-- Panel 2 — Platform + Generate -->
+        <div class="panel" style="margin-top:1rem">
+          <div class="panel-header">
+            <div class="dot dot-amber"></div>
+            <div class="panel-title">Output Platform</div>
+          </div>
+          <div class="panel-body">
+            <div class="platform-tabs" id="dhcp-platform-tabs" style="margin-bottom:1.25rem">
+              <button class="platform-tab active" onclick="setDhcpPlatform('cisco-ios',this)">Cisco IOS</button>
+              <button class="platform-tab"        onclick="setDhcpPlatform('windows-ps',this)">Windows Server PS</button>
+              <button class="platform-tab"        onclick="setDhcpPlatform('isc-dhcp',this)">ISC DHCP</button>
+              <button class="platform-tab"        onclick="setDhcpPlatform('kea',this)">Kea DHCP4</button>
+              <button class="platform-tab"        onclick="setDhcpPlatform('mikrotik',this)">MikroTik RouterOS</button>
+            </div>
+            <div class="error-bar" id="dhcp-error-bar"><span>⚠</span><span id="dhcp-error-text"></span></div>
+            <div class="action-row">
+              <button class="btn-primary" onclick="generateDHCPConfig()">📋&nbsp; Generate Config</button>
+              <button class="btn-ghost"   onclick="resetDHCP()">Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DHCP Output -->
+        <div id="dhcp-output-section" style="display:none;margin-top:1rem">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="dot dot-green"></div>
+              <div class="panel-title" id="dhcp-output-title">Generated DHCP Configuration</div>
+            </div>
+            <div class="panel-body" style="padding:0">
+              <div class="code-output">
+                <div class="code-toolbar">
+                  <span class="code-lang-badge" id="dhcp-code-badge">CISCO IOS</span>
+                  <button class="btn-copy" onclick="copyCode('dhcp-code-pre',this)">⎘ Copy</button>
+                </div>
+                <pre class="code-block" id="dhcp-code-pre"></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /tab-dhcp -->
+
+    </div><!-- /main-col -->
+
+    <!-- ── RIGHT SIDEBAR ────────────────────────────── -->
+    <div class="sidebar-col">
+      <div class="ad-zone ad-sidebar-box">
+        <!--  REPLACE: 160×280  -->
+        AD<br>160×280<br>Rectangle<br><br>
+        <span style="font-size:0.55rem;opacity:0.6">AdSense / Affiliate</span>
+      </div>
+      <div class="ad-zone ad-sidebar-box">
+        <!--  REPLACE: 160×280  -->
+        AD<br>160×280<br>Rectangle
+      </div>
+    </div>
+
+  </div><!-- /main-grid -->
+
+</div><!-- /page-outer -->
+</main><!-- /main-content -->
+
+<!-- ── SEO CONTENT SECTION ──────────────────────────────
+     Static crawlable text — critical for organic search.
+     Styled to match brand but primarily here for indexing. -->
+<section class="seo-section" aria-label="About Network Sloth subnet calculator">
+  <div class="seo-content-wrap">
+
+    <div class="seo-intro">
+      <h2 class="seo-h2">Free Subnet Calculator &amp; Network Planning Tools</h2>
+      <p class="seo-p">Network Sloth is a free, browser-based toolkit built for network engineers who need fast, accurate subnetting without fuss. Every calculation runs locally in your browser — no data is sent to any server, no account is required, and there is no rate limiting. Enter a network address, choose your prefix length and calculation mode, and get subnet addresses, broadcast addresses, usable host ranges, Cisco wildcard masks and CSV export in one click.</p>
+    </div>
+
+    <div class="seo-grid">
+
+      <div class="seo-card">
+        <h2 class="seo-h3">CIDR Subnet Calculator</h2>
+        <p class="seo-p">Calculate subnets from any IPv4 address using CIDR notation — from /8 to /30. Choose between three modes: split a network into a set number of subnets, find the right subnet size for a given number of hosts, or specify a custom prefix length directly. Results include the network address, subnet mask, CIDR prefix, Cisco wildcard mask, first usable host, last usable host, broadcast address and usable host count for every subnet.</p>
+      </div>
+
+      <div class="seo-card">
+        <h2 class="seo-h3">VLSM Network Scenario Planner</h2>
+        <p class="seo-p">The Scenario Planner uses Variable Length Subnet Masking (VLSM) to allocate the most efficient subnet size to each VLAN or network segment automatically. Choose from pre-built templates — small corporate network, medium enterprise, home lab, branch office or data centre — or define your own VLANs with custom host counts. The engine sorts segments largest-first and packs them into your chosen address space with no wasted addresses.</p>
+      </div>
+
+      <div class="seo-card">
+        <h2 class="seo-h3">DHCP Scope Generator</h2>
+        <p class="seo-p">Generate ready-to-paste DHCP configuration for every subnet in your plan. Supported platforms include Cisco IOS (<code>ip dhcp pool</code>), Windows Server DHCP (PowerShell <code>Add-DhcpServerv4Scope</code>), ISC DHCP (<code>dhcpd.conf</code>), Kea DHCP4 (JSON) and MikroTik RouterOS. Set DNS servers, domain suffix, lease duration and exclusion ranges per scope. Import subnets directly from the Scenario Planner or the Manual Calculator.</p>
+      </div>
+
+      <div class="seo-card">
+        <h2 class="seo-h3">Firewall Rule Generator</h2>
+        <p class="seo-p">Generate inter-VLAN firewall rules from your network plan without writing ACLs by hand. Choose a policy preset — Strict (deny all inter-VLAN, permit internet), Relaxed (permit all), or Custom (define rules by source VLAN, destination, protocol and port) — then select your output platform: Cisco IOS named extended ACLs, pfSense or OPNsense XML, or Juniper EX/QFX firewall filters. Output includes interface application commands and is ready to copy directly into your device.</p>
+      </div>
+
+    </div><!-- /seo-grid -->
+
+    <!-- FAQ — targets featured snippets -->
+    <div class="seo-faq" id="faq">
+      <h2 class="seo-h2">Frequently Asked Questions</h2>
+
+      <details class="faq-item">
+        <summary class="faq-q">What is CIDR notation?</summary>
+        <p class="faq-a">CIDR (Classless Inter-Domain Routing) notation expresses an IP network as a base address and prefix length — for example <code>192.168.1.0/24</code>. The number after the slash tells you how many bits form the network portion. A <code>/24</code> gives 256 addresses (254 usable hosts); a <code>/25</code> gives 128; a <code>/30</code> gives 4 (2 usable — useful for point-to-point WAN links).</p>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">What is a wildcard mask and how is it different from a subnet mask?</summary>
+        <p class="faq-a">A subnet mask uses binary 1s to mark the network bits (<code>255.255.255.0</code> for a /24). A wildcard mask is the bitwise inverse — 0s mark the network bits and 1s mark the host bits (<code>0.0.0.255</code> for a /24). Cisco IOS uses wildcard masks in access control lists (ACLs) and OSPF <code>network</code> statements. Network Sloth displays the Cisco wildcard mask alongside every subnet result.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">What is VLSM and why should I use it?</summary>
+        <p class="faq-a">Variable Length Subnet Masking (VLSM) lets you carve different-sized subnets from a single address block — a <code>/30</code> for a WAN link, a <code>/25</code> for a staff VLAN, a <code>/28</code> for servers — rather than wasting a fixed block on every segment. This maximises address efficiency, which matters whether you are working with public IP space or keeping RFC 1918 private ranges tidy across many sites.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">How do I calculate subnets and usable hosts?</summary>
+        <p class="faq-a">Subnets created by borrowing <em>n</em> bits from the host portion = 2<sup>n</sup>. Usable hosts per subnet = 2<sup>h</sup> − 2, where <em>h</em> is the number of remaining host bits (the −2 accounts for the network address and broadcast address). Example: splitting a <code>/24</code> into <code>/26</code>s borrows 2 bits → 4 subnets, each with 2<sup>6</sup> − 2 = 62 usable hosts. Network Sloth calculates all of this automatically.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">Is Network Sloth completely free?</summary>
+        <p class="faq-a">Yes. Every tool on Network Sloth — the subnet calculator, VLSM planner, DHCP scope generator and firewall rule generator — is free to use with no account, no rate limits and no expiry. All calculations run in your browser; nothing is sent to a server.</p>
+      </details>
+
+    </div><!-- /seo-faq -->
+
+  </div><!-- /seo-content-wrap -->
+</section><!-- /seo-section -->
+
+<!-- ── FOOTER ──────────────────────────────────────────── -->
+<footer>
+  <div class="footer-ad-wrap">
+    <div class="ad-zone footer-ad">
+      <!--  REPLACE: 728×90 footer ad  -->
+      ADVERTISEMENT · 728×90 FOOTER BANNER<br>
+      <span style="font-size:0.55rem;opacity:0.6">Insert AdSense / Affiliate banner code here</span>
+    </div>
+  </div>
+  <div class="footer-inner">
+    <div class="logo" style="font-size:1rem">
+      <span class="logo-icon" style="font-size:1.4rem">🦥</span>
+      <span>NETWORK <em>SLOTH</em></span>
+    </div>
+    <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim);letter-spacing:1px;text-align:center;font-style:italic">
+      "Slow but determined subnetting since 2026"
+    </div>
+    <div class="footer-nav">
+      <a href="about.html">About</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="cookie-policy.html">Cookie Policy</a>
+      <a href="Downloads/subnet-cheat-sheet.pdf">Subnet Cheat Sheet (PDF)</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="footer-copy">
+      © 2026 Network Sloth · Free tools for network engineers · All calculations provided for informational purposes only
+    </div>
+  </div>
+</footer>
+
+<script src="subnet-calculator.js"></script>
+</body>
+</html>
