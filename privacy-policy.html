@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Privacy Policy — Network Sloth</title>
-  <meta name="description" content="Network Sloth privacy policy. Learn how we use cookies, Google AdSense, and what data (very little) we collect.">
+  <meta name="description" content="Privacy Policy for Network Sloth — how we handle your data, cookies, Google AdSense, and GitHub Pages hosting.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -56,172 +56,305 @@
 
     /* ── NAV ── */
     nav {
-      position: sticky; top: 0; z-index: 200;
+      position: sticky;
+      top: 0;
+      z-index: 200;
       height: 58px;
       background: rgba(13,10,5,0.96);
       border-bottom: 1px solid var(--border);
       backdrop-filter: blur(12px);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 1.5rem; gap: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      gap: 1rem;
     }
     .logo {
       font-family: var(--font-display);
-      font-size: 1.25rem; font-weight: 900;
-      letter-spacing: 1px; text-transform: uppercase;
+      font-size: 1.25rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
       color: var(--text-primary);
-      white-space: nowrap; flex-shrink: 0;
-      display: flex; align-items: center; gap: 0.5rem;
       text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
-    .logo-icon { font-size: 1.6rem; line-height: 1; }
-    .logo em   { color: var(--accent); font-style: normal; }
+    .logo em { color: var(--accent); font-style: normal; }
     .nav-badge {
-      font-family: var(--font-mono); font-size: 0.55rem; font-weight: 600;
-      letter-spacing: 2px; text-transform: uppercase;
-      color: var(--accent); border: 1px solid var(--accent);
-      border-radius: 2px; padding: 2px 5px; margin-left: 8px;
-      vertical-align: middle; opacity: 0.7;
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 2px;
+      padding: 2px 5px;
+      opacity: 0.7;
     }
     .nav-back {
-      font-family: var(--font-display); font-size: 0.78rem; font-weight: 600;
-      letter-spacing: 1px; text-transform: uppercase;
-      color: var(--text-secondary); text-decoration: none;
-      border: 1px solid var(--border); border-radius: 3px;
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      text-decoration: none;
       padding: 0.35rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 3px;
       transition: all 0.18s;
     }
     .nav-back:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
 
-    /* ── HERO ── */
+    /* ── PAGE HERO ── */
     .page-hero {
-      position: relative; z-index: 1;
+      position: relative;
+      z-index: 1;
       background: linear-gradient(135deg, #1c1208 0%, #231a0a 60%, #1a1506 100%);
       border-bottom: 1px solid var(--border-bright);
-      padding: 2.5rem 2rem;
+      padding: 2rem 2rem 1.75rem;
       overflow: hidden;
     }
     .page-hero::after {
       content: '🔒';
-      position: absolute; right: 2rem; bottom: -10px;
-      font-size: 6rem; opacity: 0.07; pointer-events: none;
+      position: absolute;
+      right: 2rem;
+      bottom: -1rem;
+      font-size: 6rem;
+      opacity: 0.05;
+      pointer-events: none;
     }
-    .page-hero-inner { max-width: 780px; margin: 0 auto; }
-    .page-eyebrow {
-      font-family: var(--font-mono); font-size: 0.62rem; font-weight: 600;
-      letter-spacing: 3px; text-transform: uppercase;
-      color: var(--accent); margin-bottom: 0.65rem;
-    }
-    .page-hero h1 {
-      font-family: var(--font-display); font-size: 2rem; font-weight: 900;
-      letter-spacing: -0.5px; color: var(--text-primary);
-      margin-bottom: 0.65rem;
-    }
-    .page-hero p {
-      font-size: 0.88rem; color: var(--text-secondary); line-height: 1.65;
-      max-width: 560px;
-    }
-    .last-updated {
-      display: inline-block; margin-top: 1rem;
-      font-family: var(--font-mono); font-size: 0.62rem;
-      color: var(--text-dim); letter-spacing: 1px;
-      border: 1px solid var(--border); border-radius: 3px;
-      padding: 0.25rem 0.65rem;
-    }
-
-    /* ── CONTENT ── */
-    .page-outer {
-      position: relative; z-index: 1;
-      max-width: 780px; margin: 0 auto;
-      padding: 2.5rem 1.25rem 4rem;
-    }
-
-    .policy-section {
-      margin-bottom: 2.5rem;
-    }
-
-    .policy-section h2 {
-      font-family: var(--font-display);
-      font-size: 0.72rem; font-weight: 700;
-      letter-spacing: 2.5px; text-transform: uppercase;
+    .page-hero-inner { max-width: 860px; margin: 0 auto; }
+    .page-tag {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 0.9rem;
-      padding-bottom: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .page-title {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      font-weight: 900;
+      color: var(--text-primary);
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+    .page-meta {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* ── CONTENT LAYOUT ── */
+    .content-outer {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 2.5rem auto 4rem;
+      padding: 0 1.5rem;
+    }
+
+    /* ── POLICY SECTIONS ── */
+    .policy-section {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+
+    .policy-section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.25rem;
+      background: var(--bg-card);
       border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; gap: 0.6rem;
     }
 
-    .policy-section p {
-      font-size: 0.88rem; color: var(--text-secondary);
-      line-height: 1.75; margin-bottom: 0.85rem;
-    }
-    .policy-section p:last-child { margin-bottom: 0; }
-
-    .policy-section ul {
-      list-style: none; padding: 0; margin-bottom: 0.85rem;
-    }
-    .policy-section ul li {
-      font-size: 0.85rem; color: var(--text-secondary);
-      line-height: 1.7; padding: 0.3rem 0 0.3rem 1.2rem;
-      position: relative; border-bottom: 1px solid var(--border);
-    }
-    .policy-section ul li:last-child { border-bottom: none; }
-    .policy-section ul li::before {
-      content: '›';
-      position: absolute; left: 0;
-      color: var(--accent); font-weight: 700;
+    .section-num {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid var(--accent);
+      border-radius: 2px;
+      padding: 2px 6px;
+      flex-shrink: 0;
     }
 
-    .policy-section a {
-      color: var(--accent); text-decoration: none;
-      border-bottom: 1px solid var(--accent-dim);
-      transition: border-color 0.18s;
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--text-primary);
     }
-    .policy-section a:hover { border-color: var(--accent); }
 
+    .policy-body {
+      padding: 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .policy-body p {
+      font-size: 0.88rem;
+      line-height: 1.75;
+      color: var(--text-primary);
+    }
+
+    .policy-body p strong {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .policy-body a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .policy-body a:hover { text-decoration: underline; }
+
+    /* Inline info box */
     .info-box {
-      background: var(--bg-card); border: 1px solid var(--border-bright);
-      border-left: 3px solid var(--accent);
-      border-radius: 4px; padding: 1rem 1.25rem;
-      margin-bottom: 1rem;
-      font-family: var(--font-mono); font-size: 0.78rem;
-      color: var(--text-secondary); line-height: 1.6;
+      padding: 0.9rem 1.1rem;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-primary);
+      line-height: 1.6;
     }
-    .info-box strong { color: var(--text-primary); font-weight: 600; }
+    .info-box.amber {
+      background: var(--amber-dim);
+      border-color: var(--amber);
+    }
+    .info-box.red {
+      background: var(--red-dim);
+      border-color: var(--red);
+    }
 
-    .amber-box {
-      background: var(--amber-dim); border: 1px solid var(--amber);
-      border-radius: 4px; padding: 1rem 1.25rem; margin-bottom: 1rem;
-      font-size: 0.82rem; color: var(--amber); line-height: 1.6;
+    /* Data table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+    .data-table th {
+      font-family: var(--font-display);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      padding: 0.55rem 0.85rem;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--accent);
+      text-align: left;
+      white-space: nowrap;
+    }
+    .data-table td {
+      font-family: var(--font-mono);
+      font-size: 0.73rem;
+      padding: 0.5rem 0.85rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-primary);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .data-table tr:nth-child(even) td { background: rgba(255,255,255,0.018); }
+    .data-table td:first-child { color: var(--accent); font-weight: 500; white-space: nowrap; }
+
+    /* Rights list */
+    .rights-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+    }
+    @media (max-width: 560px) { .rights-list { grid-template-columns: 1fr; } }
+
+    .right-item {
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+      padding: 0.7rem 0.85rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+    .right-icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.05rem; }
+    .right-body { flex: 1; }
+    .right-title {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      margin-bottom: 0.18rem;
+    }
+    .right-desc {
+      font-size: 0.73rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
     }
 
     /* ── FOOTER ── */
     footer {
-      position: relative; z-index: 1;
-      margin-top: 3rem; border-top: 1px solid var(--border);
+      position: relative;
+      z-index: 1;
+      margin-top: 3rem;
+      border-top: 1px solid var(--border);
       padding: 2rem 1.5rem;
     }
     .footer-inner {
-      max-width: 900px; margin: 0 auto;
-      display: flex; flex-direction: column; align-items: center; gap: 1.25rem;
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
     }
     .footer-nav {
-      display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center;
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
     }
     .footer-nav a {
-      font-family: var(--font-mono); font-size: 0.68rem;
-      letter-spacing: 1px; color: var(--text-secondary);
-      text-decoration: none; transition: color 0.18s;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.18s;
     }
     .footer-nav a:hover { color: var(--accent); }
     .footer-copy {
-      font-family: var(--font-mono); font-size: 0.6rem;
-      color: var(--text-dim); text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      text-align: center;
     }
 
     @media (max-width: 600px) {
       nav { padding: 0 1rem; }
-      .page-hero { padding: 1.75rem 1rem; }
-      .page-hero h1 { font-size: 1.5rem; }
+      .page-hero { padding: 1.5rem 1rem; }
+      .content-outer { padding: 0 0.75rem; }
+      .policy-body { padding: 1.1rem; }
     }
   </style>
 </head>
@@ -229,7 +362,7 @@
 
 <nav>
   <a class="logo" href="index.html">
-    <span class="logo-icon">🦥</span>
+    <span style="font-size:1.4rem">🦥</span>
     <span>NETWORK <em>SLOTH</em></span>
     <span class="nav-badge">FREE</span>
   </a>
@@ -238,99 +371,282 @@
 
 <div class="page-hero">
   <div class="page-hero-inner">
-    <div class="page-eyebrow">Legal</div>
-    <h1>Privacy Policy</h1>
-    <p>Network Sloth is a free, browser-based tool for network engineers. We keep data collection to an absolute minimum — most of this page is about Google AdSense cookies, not us tracking you.</p>
-    <span class="last-updated">Last updated: June 2026</span>
+    <div class="page-tag">Legal · Compliance</div>
+    <div class="page-title">Privacy Policy</div>
+    <div class="page-meta">
+      <span>Last updated: June 2026</span>
+      <span>Effective: June 2026</span>
+      <span>Applies to: networksloth.io</span>
+    </div>
   </div>
 </div>
 
-<div class="page-outer">
+<div class="content-outer">
 
-  <div class="info-box">
-    <strong>Short version:</strong> Network Sloth doesn't collect your personal data, doesn't require an account, and doesn't store anything you enter into the calculator. Google AdSense places cookies for ad targeting. If you're in the UK/EU, a cookie banner will appear on your first visit.
+  <!-- INTRO BOX -->
+  <div class="info-box" style="margin-bottom:1.5rem">
+    🦥 &nbsp;<strong>Plain English first:</strong> Network Sloth is a free, browser-based tool for network engineers. We do not run a user database, sell your data, or require any sign-up. This policy explains what limited data is collected by the infrastructure and advertising systems we rely on, and what your rights are.
   </div>
 
+  <!-- 1. WHO WE ARE -->
   <div class="policy-section">
-    <h2>⬡ Who We Are</h2>
-    <p>Network Sloth (networksloth.io) is a free, client-side subnet calculator and network planning tool. All calculations run entirely in your browser — no data is sent to any server operated by us.</p>
-    <p>For privacy enquiries, contact us at: <a href="mailto:privacy@networksloth.io">privacy@networksloth.io</a></p>
-  </div>
-
-  <div class="policy-section">
-    <h2>⬡ Data We Collect</h2>
-    <p>Network Sloth itself collects <strong style="color:var(--text-primary)">no personal data</strong>. Specifically:</p>
-    <ul>
-      <li>IP addresses, subnet inputs, and network plans you enter are processed locally in your browser and are never transmitted to us.</li>
-      <li>We do not require registration, login, or any account.</li>
-      <li>We do not use analytics software (such as Google Analytics) that tracks individual users.</li>
-      <li>CSV exports you generate are created and downloaded entirely client-side.</li>
-    </ul>
-  </div>
-
-  <div class="policy-section">
-    <h2>⬡ Google AdSense & Cookies</h2>
-    <p>We display advertisements served by <strong style="color:var(--text-primary)">Google AdSense</strong>. Google uses cookies to serve ads based on your prior visits to this and other websites. This is the primary reason this Privacy Policy exists.</p>
-    <div class="amber-box">
-      ⚠ Google AdSense and its partners may use cookies to show you personalised ads. You can opt out of personalised advertising at any time via <a href="https://adssettings.google.com" target="_blank" rel="noopener" style="color:var(--amber);border-bottom-color:rgba(232,160,32,0.3)">Google's Ad Settings</a>.
+    <div class="policy-section-header">
+      <span class="section-num">01</span>
+      <span class="section-title">Who We Are &amp; How to Contact Us</span>
     </div>
-    <p>Specifically, AdSense cookies may be used to:</p>
-    <ul>
-      <li>Show ads relevant to your interests based on your browsing history.</li>
-      <li>Limit how many times you see the same ad.</li>
-      <li>Measure the effectiveness of advertising campaigns.</li>
-    </ul>
-    <p>For full details on how Google uses data when you use our site, see <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">How Google uses information from sites or apps that use our services</a>.</p>
+    <div class="policy-body">
+      <p>Network Sloth (<strong>networksloth.io</strong>) is a free, independent website providing subnet calculation and network planning tools. The site is operated by an individual developer based in the United Kingdom.</p>
+      <p>For any privacy-related enquiries, including requests to exercise your rights under UK GDPR or GDPR, please contact us at: <strong><a href="mailto:privacy@networksloth.io">privacy@networksloth.io</a></strong></p>
+      <p>We will respond to all legitimate privacy requests within <strong>30 days</strong> of receipt.</p>
+    </div>
   </div>
 
+  <!-- 2. HOSTING -->
   <div class="policy-section">
-    <h2>⬡ UK & EU Users (GDPR / UK GDPR)</h2>
-    <p>If you are accessing Network Sloth from the United Kingdom or European Union, you have additional rights under the UK GDPR / EU GDPR:</p>
-    <ul>
-      <li>You have the right to access, correct, or request deletion of any personal data held about you.</li>
-      <li>You have the right to object to or restrict processing of your data.</li>
-      <li>You have the right to withdraw consent for cookie-based advertising at any time.</li>
-    </ul>
-    <p>Because we do not collect personal data ourselves, most of these rights apply to Google's data practices. You can manage Google's use of your data at <a href="https://myaccount.google.com" target="_blank" rel="noopener">myaccount.google.com</a> or opt out of interest-based advertising via <a href="https://www.youronlinechoices.com" target="_blank" rel="noopener">Your Online Choices</a>.</p>
-    <p>To exercise rights relating to any data held by Network Sloth, contact <a href="mailto:privacy@networksloth.io">privacy@networksloth.io</a>.</p>
+    <div class="policy-section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">Hosting &amp; Infrastructure (GitHub Pages)</span>
+    </div>
+    <div class="policy-body">
+      <p>This website is hosted using <strong>GitHub Pages</strong>, a static site hosting service provided by GitHub, Inc. (a subsidiary of Microsoft Corporation). The site is served from GitHub's global CDN under our custom domain <strong>networksloth.io</strong>.</p>
+      <p>When you visit any page on this site, your browser connects to GitHub's servers. GitHub may automatically collect and log certain technical data as part of normal server operation, including:</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Data Type</th><th>Purpose</th><th>Collected By</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>IP address</td><td>Server log / DDoS protection / CDN routing</td><td>GitHub, Inc.</td></tr>
+          <tr><td>Browser &amp; OS (User-Agent)</td><td>Standard HTTP server logs</td><td>GitHub, Inc.</td></tr>
+          <tr><td>Referring URL</td><td>Standard HTTP server logs</td><td>GitHub, Inc.</td></tr>
+          <tr><td>Pages visited &amp; timestamps</td><td>Standard HTTP server logs</td><td>GitHub, Inc.</td></tr>
+        </tbody>
+      </table>
+      <p>This data is collected and processed by GitHub under their own privacy policy. Network Sloth does not have direct access to these server logs. For full details of how GitHub processes this data, please see the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub General Privacy Statement</a>.</p>
+      <div class="info-box amber">
+        ⚠ &nbsp;GitHub Pages is operated by GitHub, Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA. Data transfers from the EEA/UK to the USA are covered by GitHub's standard contractual clauses and/or their participation in approved transfer mechanisms.
+      </div>
+    </div>
   </div>
 
+  <!-- 3. DATA WE COLLECT -->
   <div class="policy-section">
-    <h2>⬡ Third-Party Links</h2>
-    <p>This site may contain links to external websites. Network Sloth is not responsible for the privacy practices or content of those sites. We encourage you to read the privacy policy of any external site you visit.</p>
+    <div class="policy-section-header">
+      <span class="section-num">03</span>
+      <span class="section-title">Data Collected by Network Sloth Directly</span>
+    </div>
+    <div class="policy-body">
+      <div class="info-box">
+        ✓ &nbsp;Network Sloth does <strong>not</strong> operate a backend server, user accounts, database, or analytics platform of its own. All calculation tools run entirely in your browser. No calculation data, IP addresses, or usage information is transmitted to or stored by Network Sloth.
+      </div>
+      <p>The only data stored locally on your device by Network Sloth is a single cookie consent preference, saved in your browser's <strong>localStorage</strong>:</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Key</th><th>Value</th><th>Purpose</th><th>Storage</th><th>Expires</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>ns_cookie_consent</td><td>"accepted" or "rejected"</td><td>Remembers your cookie choice so the banner does not re-appear on every visit</td><td>Browser localStorage (your device only)</td><td>Until you clear browser storage</td></tr>
+        </tbody>
+      </table>
+      <p>This value never leaves your device and is never transmitted to any server.</p>
+    </div>
   </div>
 
+  <!-- 4. GOOGLE ADSENSE -->
   <div class="policy-section">
-    <h2>⬡ Children's Privacy</h2>
-    <p>Network Sloth is intended for use by network professionals and IT students. We do not knowingly collect data from children under the age of 13. If you believe a child has provided personal information through this site, please contact us.</p>
+    <div class="policy-section-header">
+      <span class="section-num">04</span>
+      <span class="section-title">Google AdSense &amp; Advertising Cookies</span>
+    </div>
+    <div class="policy-body">
+      <p>To fund the ongoing operation of this free service, Network Sloth displays advertisements served by <strong>Google AdSense</strong>, a service operated by Google LLC (and Google Ireland Limited for EEA/UK users). AdSense is only loaded <strong>after you give explicit consent</strong> via the cookie banner on your first visit.</p>
+      <p>If you <strong>reject</strong> cookies via our banner, AdSense scripts are never loaded or executed. No advertising cookies are set.</p>
+      <p>If you <strong>accept</strong> cookies, Google AdSense may set the following types of cookies and use similar tracking technologies:</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Cookie / Technology</th><th>Purpose</th><th>Set By</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>__gads / __gpi</td><td>Ad delivery, frequency capping, and fraud prevention</td><td>Google LLC</td></tr>
+          <tr><td>IDE (DoubleClick)</td><td>Personalised advertising based on browsing behaviour</td><td>Google LLC (doubleclick.net)</td></tr>
+          <tr><td>CONSENT / SOCS</td><td>Records your consent state across Google properties</td><td>Google LLC</td></tr>
+          <tr><td>NID / 1P_JAR</td><td>Ad personalisation and user preferences</td><td>Google LLC</td></tr>
+        </tbody>
+      </table>
+      <p>Google may use the data collected through these cookies to serve personalised advertisements based on your browsing history across the web, measure ad performance, and for fraud prevention.</p>
+      <p>The lawful basis for processing this data (where consent is given) is <strong>Article 6(1)(a) UK GDPR / GDPR — Consent</strong>.</p>
+      <div class="info-box amber">
+        🔗 &nbsp;For full details of how Google processes advertising data, see the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a> and <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google's Advertising Technologies page</a>. To opt out of personalised advertising across Google services, visit <a href="https://adssettings.google.com" target="_blank" rel="noopener">Google Ad Settings</a> or the <a href="https://optout.networkadvertising.org/" target="_blank" rel="noopener">NAI opt-out tool</a>.
+      </div>
+      <p>Google LLC is established at 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA. Data transfers from the UK/EEA to the USA are governed by Google's Standard Contractual Clauses and/or their adequacy framework participation.</p>
+    </div>
   </div>
 
+  <!-- 5. LAWFUL BASIS -->
   <div class="policy-section">
-    <h2>⬡ Changes to This Policy</h2>
-    <p>We may update this Privacy Policy from time to time. The "Last updated" date at the top of this page reflects when the most recent changes were made. Continued use of the site after any changes constitutes acceptance of the updated policy.</p>
+    <div class="policy-section-header">
+      <span class="section-num">05</span>
+      <span class="section-title">Lawful Basis for Processing</span>
+    </div>
+    <div class="policy-body">
+      <table class="data-table">
+        <thead>
+          <tr><th>Processing Activity</th><th>Lawful Basis</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Server log data (GitHub Pages)</td><td>Legitimate Interests — Art. 6(1)(f)</td><td>Necessary for secure hosting. Controlled by GitHub, not us.</td></tr>
+          <tr><td>Cookie consent preference (localStorage)</td><td>Legitimate Interests — Art. 6(1)(f)</td><td>Essential to honour your own preference. No data leaves your device.</td></tr>
+          <tr><td>Google AdSense advertising cookies</td><td>Consent — Art. 6(1)(a)</td><td>Only activated after you explicitly accept via our cookie banner.</td></tr>
+          <tr><td>Responding to privacy enquiries</td><td>Legal Obligation — Art. 6(1)(c)</td><td>UK GDPR Article 12–22 rights fulfilment.</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
+  <!-- 6. DATA RETENTION -->
   <div class="policy-section">
-    <h2>⬡ Contact</h2>
-    <p>Questions about this policy? Reach us at <a href="mailto:privacy@networksloth.io">privacy@networksloth.io</a> or use the <a href="contact.html">Contact page</a>.</p>
+    <div class="policy-section-header">
+      <span class="section-num">06</span>
+      <span class="section-title">Data Retention</span>
+    </div>
+    <div class="policy-body">
+      <p>As Network Sloth does not operate its own data storage infrastructure, there is no personal data held by us to delete. Specifically:</p>
+      <p><strong>GitHub Pages server logs</strong> — retained by GitHub in accordance with their data retention policies. Please refer to the GitHub Privacy Statement for details.</p>
+      <p><strong>Google AdSense cookies</strong> — retained and managed by Google in accordance with their privacy policy. Cookie lifetimes vary; most advertising cookies expire within 13 months per Google's policy.</p>
+      <p><strong>Cookie consent preference (localStorage)</strong> — stored on your device only. You can delete it at any time by clearing your browser's site data for networksloth.io, or by clearing all localStorage through your browser settings.</p>
+    </div>
+  </div>
+
+  <!-- 7. YOUR RIGHTS -->
+  <div class="policy-section">
+    <div class="policy-section-header">
+      <span class="section-num">07</span>
+      <span class="section-title">Your Rights Under UK GDPR &amp; GDPR</span>
+    </div>
+    <div class="policy-body">
+      <p>Where Network Sloth acts as a data controller, you have the following rights regarding your personal data:</p>
+      <div class="rights-list">
+        <div class="right-item">
+          <div class="right-icon">👁</div>
+          <div class="right-body">
+            <div class="right-title">Right of Access</div>
+            <div class="right-desc">Request a copy of any personal data we hold about you.</div>
+          </div>
+        </div>
+        <div class="right-item">
+          <div class="right-icon">✏️</div>
+          <div class="right-body">
+            <div class="right-title">Right to Rectification</div>
+            <div class="right-desc">Request correction of any inaccurate personal data.</div>
+          </div>
+        </div>
+        <div class="right-item">
+          <div class="right-icon">🗑</div>
+          <div class="right-body">
+            <div class="right-title">Right to Erasure</div>
+            <div class="right-desc">Request deletion of your personal data ("right to be forgotten").</div>
+          </div>
+        </div>
+        <div class="right-item">
+          <div class="right-icon">⏸</div>
+          <div class="right-body">
+            <div class="right-title">Right to Restriction</div>
+            <div class="right-desc">Request that we restrict processing of your data.</div>
+          </div>
+        </div>
+        <div class="right-item">
+          <div class="right-icon">📦</div>
+          <div class="right-body">
+            <div class="right-title">Right to Portability</div>
+            <div class="right-desc">Receive your data in a structured, machine-readable format.</div>
+          </div>
+        </div>
+        <div class="right-item">
+          <div class="right-icon">🚫</div>
+          <div class="right-body">
+            <div class="right-title">Right to Object</div>
+            <div class="right-desc">Object to processing based on legitimate interests.</div>
+          </div>
+        </div>
+        <div class="right-item">
+          <div class="right-icon">↩️</div>
+          <div class="right-body">
+            <div class="right-title">Right to Withdraw Consent</div>
+            <div class="right-desc">Withdraw advertising cookie consent at any time by clearing your localStorage or visiting our cookie settings.</div>
+          </div>
+        </div>
+        <div class="right-item">
+          <div class="right-icon">🏛</div>
+          <div class="right-body">
+            <div class="right-title">Right to Lodge a Complaint</div>
+            <div class="right-desc">Complain to the ICO (UK) or your local supervisory authority.</div>
+          </div>
+        </div>
+      </div>
+      <p>To exercise any of the above rights, contact us at <a href="mailto:privacy@networksloth.io">privacy@networksloth.io</a>. Note: because we hold minimal personal data, many of these rights may not apply in practice — we will always explain clearly what we can and cannot do in response to your request.</p>
+      <div class="info-box">
+        🏛 &nbsp;<strong>UK Supervisory Authority:</strong> Information Commissioner's Office (ICO) — <a href="https://ico.org.uk" target="_blank" rel="noopener">ico.org.uk</a> — Tel: 0303 123 1113. You have the right to lodge a complaint with the ICO at any time if you believe your data has been processed unlawfully.
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. THIRD PARTY LINKS -->
+  <div class="policy-section">
+    <div class="policy-section-header">
+      <span class="section-num">08</span>
+      <span class="section-title">Third-Party Links</span>
+    </div>
+    <div class="policy-body">
+      <p>This website may contain links to external websites, training resources, or partner tools. Network Sloth has no control over the content or privacy practices of those sites. We recommend reviewing the privacy policy of any external site you visit.</p>
+      <p>Advertisements served by Google AdSense may link to third-party websites. Network Sloth is not responsible for the privacy practices of any advertiser's destination website.</p>
+    </div>
+  </div>
+
+  <!-- 9. CHILDREN -->
+  <div class="policy-section">
+    <div class="policy-section-header">
+      <span class="section-num">09</span>
+      <span class="section-title">Children's Privacy</span>
+    </div>
+    <div class="policy-body">
+      <p>Network Sloth is a technical tool intended for network engineers and IT professionals. It is not directed at children under the age of 13 (or 16 where applicable under local law). We do not knowingly collect personal data from children.</p>
+    </div>
+  </div>
+
+  <!-- 10. CHANGES -->
+  <div class="policy-section">
+    <div class="policy-section-header">
+      <span class="section-num">10</span>
+      <span class="section-title">Changes to This Policy</span>
+    </div>
+    <div class="policy-body">
+      <p>We may update this Privacy Policy from time to time to reflect changes in our practices, legal requirements, or the services we use. The "Last updated" date at the top of this page will always reflect the most recent revision.</p>
+      <p>For significant changes that affect your rights, we will display a notice on the main tool page. We encourage you to review this policy periodically.</p>
+      <p>Continued use of Network Sloth after any changes constitutes acceptance of the updated policy.</p>
+    </div>
+  </div>
+
+  <!-- CONTACT BOX -->
+  <div class="info-box" style="margin-top:1rem">
+    ✉ &nbsp;<strong>Privacy questions?</strong> Email us at <a href="mailto:privacy@networksloth.io">privacy@networksloth.io</a>. We aim to respond within 5 business days for general enquiries and within 30 days for formal data subject requests.
   </div>
 
 </div>
 
 <footer>
   <div class="footer-inner">
-    <a class="logo" href="index.html" style="font-size:1rem;text-decoration:none">
-      <span class="logo-icon" style="font-size:1.4rem">🦥</span>
+    <div class="logo" style="font-size:1rem">
+      <span style="font-size:1.4rem">🦥</span>
       <span>NETWORK <em>SLOTH</em></span>
-    </a>
+    </div>
     <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim);letter-spacing:1px;text-align:center;font-style:italic">
       "Slow but determined subnetting since 2026"
     </div>
     <div class="footer-nav">
+      <a href="index.html">Tools</a>
       <a href="about.html">About</a>
       <a href="privacy-policy.html">Privacy Policy</a>
-      <a href="contact.html">Contact</a>
-      <a href="index.html">Subnet Calculator</a>
+      <a href="cookie-policy.html">Cookie Policy</a>
+      <a href="index.html#contact">Contact</a>
     </div>
     <div class="footer-copy">
       © 2026 Network Sloth · Free tools for network engineers · All calculations provided for informational purposes only

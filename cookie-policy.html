@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cookie Policy — Network Sloth</title>
+  <meta name="description" content="Cookie Policy for Network Sloth — what cookies we use, why, and how to manage or opt out including Google AdSense advertising cookies.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep:       #0d0a05;
+      --bg-panel:      #161009;
+      --bg-card:       #1d150b;
+      --bg-hover:      #271c0e;
+      --border:        #3a2a14;
+      --border-bright: #56401e;
+      --accent:        #5cb870;
+      --accent-dim:    rgba(92,184,112,0.13);
+      --accent-glow:   rgba(92,184,112,0.32);
+      --amber:         #e8a020;
+      --amber-dim:     rgba(232,160,32,0.13);
+      --red:           #e8505f;
+      --red-dim:       rgba(232,80,95,0.13);
+      --text-primary:  #eddfc0;
+      --text-secondary:#9a7d52;
+      --text-dim:      #4a3818;
+      --font-display:  'Nunito', sans-serif;
+      --font-mono:     'JetBrains Mono', monospace;
+      --font-body:     'Nunito', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-weight: 400;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(92,184,112,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(92,184,112,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      height: 58px;
+      background: rgba(13,10,5,0.96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      gap: 1rem;
+    }
+    .logo {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .logo em { color: var(--accent); font-style: normal; }
+    .nav-badge {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 2px;
+      padding: 2px 5px;
+      opacity: 0.7;
+    }
+    .nav-back {
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 0.35rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      transition: all 0.18s;
+    }
+    .nav-back:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      position: relative;
+      z-index: 1;
+      background: linear-gradient(135deg, #1c1208 0%, #231a0a 60%, #1a1506 100%);
+      border-bottom: 1px solid var(--border-bright);
+      padding: 2rem 2rem 1.75rem;
+      overflow: hidden;
+    }
+    .page-hero::after {
+      content: '🍪';
+      position: absolute;
+      right: 2rem;
+      bottom: -1rem;
+      font-size: 6rem;
+      opacity: 0.06;
+      pointer-events: none;
+    }
+    .page-hero-inner { max-width: 860px; margin: 0 auto; }
+    .page-tag {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.5rem;
+    }
+    .page-title {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      font-weight: 900;
+      color: var(--text-primary);
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+    .page-meta {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* ── CONTENT LAYOUT ── */
+    .content-outer {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 2.5rem auto 4rem;
+      padding: 0 1.5rem;
+    }
+
+    /* ── POLICY SECTIONS ── */
+    .policy-section {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+    .policy-section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.25rem;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+    }
+    .section-num {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--amber);
+      background: var(--amber-dim);
+      border: 1px solid var(--amber);
+      border-radius: 2px;
+      padding: 2px 6px;
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--text-primary);
+    }
+    .policy-body {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .policy-body p {
+      font-size: 0.88rem;
+      line-height: 1.75;
+      color: var(--text-primary);
+    }
+    .policy-body p strong { color: var(--accent); font-weight: 700; }
+    .policy-body a { color: var(--accent); text-decoration: none; }
+    .policy-body a:hover { text-decoration: underline; }
+
+    /* Info boxes */
+    .info-box {
+      padding: 0.9rem 1.1rem;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+    .info-box.amber { background: var(--amber-dim); border-color: var(--amber); }
+    .info-box.red   { background: var(--red-dim);   border-color: var(--red); }
+
+    /* Data table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+    .data-table th {
+      font-family: var(--font-display);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      padding: 0.55rem 0.85rem;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--amber);
+      text-align: left;
+      white-space: nowrap;
+    }
+    .data-table td {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      padding: 0.5rem 0.85rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-primary);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .data-table tr:nth-child(even) td { background: rgba(255,255,255,0.018); }
+    .data-table td:first-child { color: var(--amber); font-weight: 500; }
+
+    /* Cookie type badges */
+    .badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 2px;
+      white-space: nowrap;
+    }
+    .badge-essential { color: var(--accent); background: var(--accent-dim); border: 1px solid var(--accent); }
+    .badge-ad        { color: var(--amber);  background: var(--amber-dim);  border: 1px solid var(--amber); }
+    .badge-third     { color: #38bdf8;       background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.35); }
+
+    /* Consent manager box */
+    .consent-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-bright);
+      border-radius: 6px;
+      padding: 1.25rem 1.5rem;
+    }
+    .consent-box h3 {
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      margin-bottom: 0.6rem;
+    }
+    .consent-box p {
+      font-size: 0.82rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+    .consent-btn-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .consent-btn-accept {
+      padding: 0.55rem 1.4rem;
+      background: var(--accent);
+      color: var(--bg-deep);
+      border: none;
+      border-radius: 4px;
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .consent-btn-accept:hover { background: #00f0c2; box-shadow: 0 0 14px var(--accent-glow); }
+    .consent-btn-reject {
+      padding: 0.55rem 1.2rem;
+      background: transparent;
+      border: 1px solid var(--border-bright);
+      border-radius: 4px;
+      color: var(--text-secondary);
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .consent-btn-reject:hover { border-color: var(--text-secondary); color: var(--text-primary); }
+    .consent-status {
+      margin-top: 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-secondary);
+    }
+    .consent-status strong { color: var(--accent); }
+    .consent-status strong.rejected { color: var(--red); }
+
+    /* How to manage grid */
+    .browser-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+    }
+    @media (max-width: 520px) { .browser-grid { grid-template-columns: 1fr; } }
+
+    .browser-card {
+      padding: 0.75rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      display: flex;
+      gap: 0.65rem;
+      align-items: flex-start;
+    }
+    .browser-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 0.05rem; }
+    .browser-name {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      margin-bottom: 0.15rem;
+    }
+    .browser-path {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      margin-top: 3rem;
+      border-top: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+    }
+    .footer-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .footer-nav {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .footer-nav a {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.18s;
+    }
+    .footer-nav a:hover { color: var(--accent); }
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 1rem; }
+      .page-hero { padding: 1.5rem 1rem; }
+      .content-outer { padding: 0 0.75rem; }
+      .policy-body { padding: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html">
+    <span style="font-size:1.4rem">🦥</span>
+    <span>NETWORK <em>SLOTH</em></span>
+    <span class="nav-badge">FREE</span>
+  </a>
+  <a class="nav-back" href="index.html">← Back to Tools</a>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-tag">Legal · Cookies</div>
+    <div class="page-title">Cookie Policy</div>
+    <div class="page-meta">
+      <span>Last updated: June 2026</span>
+      <span>Effective: June 2026</span>
+      <span>Applies to: networksloth.io</span>
+    </div>
+  </div>
+</div>
+
+<div class="content-outer">
+
+  <div class="info-box amber" style="margin-bottom:1.5rem">
+    🍪 &nbsp;<strong>Short version:</strong> We only set essential cookies ourselves (your consent preference). Advertising cookies from Google AdSense are only loaded if you click <em>Accept</em> on our consent banner. If you click <em>Reject</em>, no advertising cookies are ever set and all tools continue to work fully.
+  </div>
+
+  <!-- 1. WHAT ARE COOKIES -->
+  <div class="policy-section">
+    <div class="policy-section-header">
+      <span class="section-num">01</span>
+      <span class="section-title">What Are Cookies?</span>
+    </div>
+    <div class="policy-body">
+      <p>Cookies are small text files placed on your device by a website when you visit it. They are widely used to make websites work efficiently, remember your preferences, and provide information to the site owner.</p>
+      <p>Network Sloth also uses <strong>localStorage</strong> — a browser mechanism similar to cookies that stores small pieces of data on your device but is never automatically sent to a server with each request. We use localStorage solely to remember your cookie consent decision.</p>
+      <p>Cookies and similar technologies can be categorised as:</p>
+      <p>
+        <span class="badge badge-essential">Essential</span> &nbsp;Required for the site to function. Cannot be disabled without breaking functionality.<br><br>
+        <span class="badge badge-ad">Advertising</span> &nbsp;Used to serve and personalise advertisements. Only set with your consent.<br><br>
+        <span class="badge badge-third">Third-Party</span> &nbsp;Set by external services (such as Google) rather than by Network Sloth directly.
+      </p>
+    </div>
+  </div>
+
+  <!-- 2. COOKIES WE USE -->
+  <div class="policy-section">
+    <div class="policy-section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">Cookies &amp; Storage Used on This Site</span>
+    </div>
+    <div class="policy-body">
+
+      <p><strong>Set by Network Sloth (Essential)</strong></p>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Storage</th>
+            <th>Purpose</th>
+            <th>Expires</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ns_cookie_consent</td>
+            <td><span class="badge badge-essential">Essential</span></td>
+            <td>localStorage</td>
+            <td>Stores your cookie consent choice ("accepted" or "rejected") so the banner does not re-appear on every visit. Never transmitted to any server.</td>
+            <td>Until you clear site data</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p style="margin-top:0.5rem"><strong>Set by Google AdSense (Advertising — only if you accept)</strong></p>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Cookie Name</th>
+            <th>Type</th>
+            <th>Domain</th>
+            <th>Purpose</th>
+            <th>Typical Expiry</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>__gads</td>
+            <td><span class="badge badge-ad">Advertising</span> <span class="badge badge-third">3rd Party</span></td>
+            <td>.networksloth.io</td>
+            <td>Ad delivery, frequency capping, and click fraud prevention by Google.</td>
+            <td>13 months</td>
+          </tr>
+          <tr>
+            <td>__gpi</td>
+            <td><span class="badge badge-ad">Advertising</span> <span class="badge badge-third">3rd Party</span></td>
+            <td>.networksloth.io</td>
+            <td>Tracks ad impressions and interactions associated with a publisher site.</td>
+            <td>13 months</td>
+          </tr>
+          <tr>
+            <td>IDE</td>
+            <td><span class="badge badge-ad">Advertising</span> <span class="badge badge-third">3rd Party</span></td>
+            <td>.doubleclick.net</td>
+            <td>Used by Google's DoubleClick to register and report the user's actions after viewing or clicking an ad, to measure the efficacy of an ad and to present targeted ads.</td>
+            <td>13 months</td>
+          </tr>
+          <tr>
+            <td>NID</td>
+            <td><span class="badge badge-ad">Advertising</span> <span class="badge badge-third">3rd Party</span></td>
+            <td>.google.com</td>
+            <td>Registers a unique ID that identifies a returning user's device for personalising ads.</td>
+            <td>6 months</td>
+          </tr>
+          <tr>
+            <td>CONSENT / SOCS</td>
+            <td><span class="badge badge-third">3rd Party</span></td>
+            <td>.google.com</td>
+            <td>Stores a user's consent state for cookies across Google services.</td>
+            <td>2 years</td>
+          </tr>
+          <tr>
+            <td>1P_JAR</td>
+            <td><span class="badge badge-ad">Advertising</span> <span class="badge badge-third">3rd Party</span></td>
+            <td>.google.com</td>
+            <td>Gathers website statistics and tracks conversion rates for Google ads.</td>
+            <td>1 month</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="info-box amber">
+        ⚠ &nbsp;The exact cookies set by Google AdSense may vary over time as Google updates their systems. The list above reflects commonly used AdSense cookies but may not be exhaustive. For the definitive list, see <a href="https://policies.google.com/technologies/cookies" target="_blank" rel="noopener">Google's cookie types page</a>.
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. HOW CONSENT WORKS -->
+  <div class="policy-section">
+    <div class="policy-section-header">
+      <span class="section-num">03</span>
+      <span class="section-title">How Our Consent System Works</span>
+    </div>
+    <div class="policy-body">
+      <p>On your first visit to Network Sloth, a cookie consent banner appears at the bottom of the screen. No advertising cookies are set before you interact with this banner.</p>
+      <p>The banner gives you two clear choices:</p>
+      <p>
+        <strong>✓ Accept</strong> — You consent to Google AdSense advertising cookies being loaded. Ads will be personalised based on your browsing history. Your choice is saved in localStorage. AdSense scripts are then dynamically injected into the page.<br><br>
+        <strong>✗ Reject</strong> — You decline optional cookies. AdSense scripts are never loaded. No advertising cookies are set at any point. All calculator and planning tools continue to work identically. Your choice is saved in localStorage.
+      </p>
+      <p>On subsequent visits, your saved preference is read from localStorage and your choice is honoured automatically — the banner will not reappear.</p>
+    </div>
+  </div>
+
+  <!-- 4. MANAGE / CHANGE CONSENT -->
+  <div class="policy-section">
+    <div class="policy-section-header">
+      <span class="section-num">04</span>
+      <span class="section-title">Change or Withdraw Your Consent</span>
+    </div>
+    <div class="policy-body">
+      <p>You can change your cookie consent preference at any time using the buttons below. Your choice will take effect immediately and be remembered for future visits.</p>
+
+      <div class="consent-box">
+        <h3>🍪 Cookie Consent Manager</h3>
+        <p>Your current advertising cookie preference is shown below. Use the buttons to update it at any time.</p>
+        <div class="consent-btn-row">
+          <button class="consent-btn-accept" onclick="updateConsent(true)">✓ Accept Cookies</button>
+          <button class="consent-btn-reject" onclick="updateConsent(false)">✗ Reject Cookies</button>
+        </div>
+        <div class="consent-status" id="consent-status">Reading preference…</div>
+      </div>
+
+      <p>Alternatively, you can clear your consent preference by deleting the <strong>ns_cookie_consent</strong> key from your browser's localStorage for networksloth.io (see "Managing cookies in your browser" below), which will cause the consent banner to reappear on your next visit.</p>
+    </div>
+  </div>
+
+  <!-- 5. BROWSER CONTROLS -->
+  <div class="policy-section">
+    <div class="policy-section-header">
+      <span class="section-num">05</span>
+      <span class="section-title">Managing Cookies in Your Browser</span>
+    </div>
+    <div class="policy-body">
+      <p>All modern browsers allow you to view, delete, and block cookies directly. Instructions for the most common browsers:</p>
+      <div class="browser-grid">
+        <div class="browser-card">
+          <div class="browser-icon">🌐</div>
+          <div>
+            <div class="browser-name">Google Chrome</div>
+            <div class="browser-path">Settings → Privacy and Security → Cookies and other site data, or: Settings → Privacy and Security → Clear browsing data</div>
+          </div>
+        </div>
+        <div class="browser-card">
+          <div class="browser-icon">🦊</div>
+          <div>
+            <div class="browser-name">Mozilla Firefox</div>
+            <div class="browser-path">Settings → Privacy &amp; Security → Cookies and Site Data → Manage Data or Clear Data</div>
+          </div>
+        </div>
+        <div class="browser-card">
+          <div class="browser-icon">🧭</div>
+          <div>
+            <div class="browser-name">Safari (macOS)</div>
+            <div class="browser-path">Safari menu → Preferences → Privacy → Manage Website Data, or: History → Clear History</div>
+          </div>
+        </div>
+        <div class="browser-card">
+          <div class="browser-icon">📱</div>
+          <div>
+            <div class="browser-name">Safari (iOS)</div>
+            <div class="browser-path">Settings app → Safari → Advanced → Website Data, or: Settings → Safari → Clear History and Website Data</div>
+          </div>
+        </div>
+        <div class="browser-card">
+          <div class="browser-icon">🔵</div>
+          <div>
+            <div class="browser-name">Microsoft Edge</div>
+            <div class="browser-path">Settings → Privacy, Search and Services → Clear Browsing Data, or: Settings → Cookies and site permissions</div>
+          </div>
+        </div>
+        <div class="browser-card">
+          <div class="browser-icon">🎭</div>
+          <div>
+            <div class="browser-name">Opera / Brave</div>
+            <div class="browser-path">Settings → Privacy &amp; Security → Cookies and other site data (same as Chrome-based browsers)</div>
+          </div>
+        </div>
+      </div>
+      <div class="info-box amber">
+        ⚠ &nbsp;Blocking all cookies or clearing all site data may affect your browsing experience on other websites. It will also clear your Network Sloth consent preference, causing the banner to reappear on your next visit.
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. OPT OUT OF GOOGLE ADS -->
+  <div class="policy-section">
+    <div class="policy-section-header">
+      <span class="section-num">06</span>
+      <span class="section-title">Opting Out of Google Personalised Advertising</span>
+    </div>
+    <div class="policy-body">
+      <p>Even if you accept cookies on this site, you can control how Google uses data for personalised advertising through the following tools:</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Tool</th><th>What It Does</th><th>Link</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Google Ad Settings</td>
+            <td>Turn off personalised ads across all Google services and partner sites</td>
+            <td><a href="https://adssettings.google.com" target="_blank" rel="noopener">adssettings.google.com</a></td>
+          </tr>
+          <tr>
+            <td>NAI Opt-Out</td>
+            <td>Opt out of targeted advertising from Network Advertising Initiative members (includes Google)</td>
+            <td><a href="https://optout.networkadvertising.org/" target="_blank" rel="noopener">optout.networkadvertising.org</a></td>
+          </tr>
+          <tr>
+            <td>YourAdChoices (EU/UK)</td>
+            <td>Manage online behavioural advertising choices for IAB Europe members</td>
+            <td><a href="https://www.youronlinechoices.eu/" target="_blank" rel="noopener">youronlinechoices.eu</a></td>
+          </tr>
+          <tr>
+            <td>Google Privacy Policy</td>
+            <td>Full details of how Google collects and uses data</td>
+            <td><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 7. GITHUB PAGES -->
+  <div class="policy-section">
+    <div class="policy-section-header">
+      <span class="section-num">07</span>
+      <span class="section-title">Hosting Infrastructure (GitHub Pages)</span>
+    </div>
+    <div class="policy-body">
+      <p>This site is hosted on <strong>GitHub Pages</strong>. GitHub may place cookies or use similar technologies as part of their infrastructure, CDN, or security systems. Network Sloth does not control these. Please refer to the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub Privacy Statement</a> for full details.</p>
+      <p>As of the last update to this policy, GitHub Pages does not set cookies on end-user browsers for tracking or advertising purposes, but this may change — always refer to their current statement for accurate information.</p>
+    </div>
+  </div>
+
+  <!-- 8. CHANGES -->
+  <div class="policy-section">
+    <div class="policy-section-header">
+      <span class="section-num">08</span>
+      <span class="section-title">Changes to This Cookie Policy</span>
+    </div>
+    <div class="policy-body">
+      <p>We may update this Cookie Policy from time to time, particularly as AdSense or browser technologies evolve. The "Last updated" date at the top of this page reflects the most recent revision. If we make significant changes — such as adding new cookie categories — we will display a notice on the main tool page.</p>
+      <p>Questions about this policy can be sent to <a href="mailto:privacy@networksloth.io">privacy@networksloth.io</a>. See our full <a href="privacy-policy.html">Privacy Policy</a> for your legal rights and how to contact the ICO.</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="logo" style="font-size:1rem">
+      <span style="font-size:1.4rem">🦥</span>
+      <span>NETWORK <em>SLOTH</em></span>
+    </div>
+    <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim);letter-spacing:1px;text-align:center;font-style:italic">
+      "Slow but determined subnetting since 2026"
+    </div>
+    <div class="footer-nav">
+      <a href="index.html">Tools</a>
+      <a href="about.html">About</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="cookie-policy.html">Cookie Policy</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+    <div class="footer-copy">
+      © 2026 Network Sloth · Free tools for network engineers · All calculations provided for informational purposes only
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Cookie Consent Manager (mirrors main site logic) ── */
+const KEY = 'ns_cookie_consent';
+
+function readConsentStatus() {
+  const val = localStorage.getItem(KEY);
+  const el  = document.getElementById('consent-status');
+  if (!el) return;
+  if (val === 'accepted') {
+    el.innerHTML = 'Current preference: <strong>Accepted</strong> — advertising cookies are active.';
+  } else if (val === 'rejected') {
+    el.innerHTML = 'Current preference: <strong class="rejected">Rejected</strong> — no advertising cookies are set.';
+  } else {
+    el.innerHTML = 'Current preference: <strong>Not yet set</strong> — visit the main page to set your preference.';
+  }
+}
+
+function updateConsent(accepted) {
+  localStorage.setItem(KEY, accepted ? 'accepted' : 'rejected');
+  readConsentStatus();
+
+  /* If accepting and AdSense not already loaded, inject it */
+  if (accepted && !document.getElementById('adsense-script')) {
+    var s = document.createElement('script');
+    s.id          = 'adsense-script';
+    s.async       = true;
+    s.defer       = true;
+    s.crossOrigin = 'anonymous';
+    s.src         = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXX';
+    document.head.appendChild(s);
+  }
+}
+
+readConsentStatus();
+</script>
+</body>
+</html>
