@@ -219,6 +219,9 @@ nav {
 
 .sidebar-col { display: flex; flex-direction: column; }
 
+/* Prevent grid item from overflowing its track — required for wide tables */
+#main-col { min-width: 0; }
+
 @media (max-width: 1050px) {
   .main-grid { grid-template-columns: 1fr; }
   .sidebar-col { display: none; }
