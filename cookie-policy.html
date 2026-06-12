@@ -741,8 +741,9 @@
   </div>
 </footer>
 
+<script src="cookie-consent.js"></script>
 <script>
-/* ── Cookie Consent Manager (mirrors main site logic) ── */
+/* ── Cookie Consent Manager (in-page preference display) ── */
 const KEY = 'ns_cookie_consent';
 
 function readConsentStatus() {
@@ -754,24 +755,14 @@ function readConsentStatus() {
   } else if (val === 'rejected') {
     el.innerHTML = 'Current preference: <strong class="rejected">Rejected</strong> — no advertising cookies are set.';
   } else {
-    el.innerHTML = 'Current preference: <strong>Not yet set</strong> — visit the main page to set your preference.';
+    el.innerHTML = 'Current preference: <strong>Not yet set</strong> — banner will appear on your next visit to any page.';
   }
 }
 
 function updateConsent(accepted) {
   localStorage.setItem(KEY, accepted ? 'accepted' : 'rejected');
   readConsentStatus();
-
-  /* If accepting and AdSense not already loaded, inject it */
-  if (accepted && !document.getElementById('adsense-script')) {
-    var s = document.createElement('script');
-    s.id          = 'adsense-script';
-    s.async       = true;
-    s.defer       = true;
-    s.crossOrigin = 'anonymous';
-    s.src         = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXX';
-    document.head.appendChild(s);
-  }
+  /* AdSense loading is handled by cookie-consent.js on next page load */
 }
 
 readConsentStatus();
