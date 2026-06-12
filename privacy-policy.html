@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Privacy Policy — Network Sloth</title>
   <meta name="description" content="Privacy Policy for Network Sloth — how we handle your data, cookies, Google AdSense, and GitHub Pages hosting.">
+  <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="https://networksloth.io/privacy-policy.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -108,8 +110,15 @@
       transition: all 0.18s;
     }
     .nav-back:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
-
-    /* ── PAGE HERO ── */
+    .nav-tools { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+    .nav-tools a {
+      font-family: var(--font-display); font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 1.2px; text-transform: uppercase; text-decoration: none;
+      padding: 0.35rem 0.85rem; border: 1px solid var(--border); border-radius: 3px;
+      color: var(--text-secondary); transition: all 0.18s ease;
+    }
+    .nav-tools a:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+    .nav-tools a.current { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
     .page-hero {
       position: relative;
       z-index: 1;
@@ -361,12 +370,26 @@
 <body>
 
 <nav>
-  <a class="logo" href="index.html">
+  <a class="logo" href="index.html" aria-label="Network Sloth — home">
     <span style="font-size:1.4rem">🦥</span>
     <span>NETWORK <em>SLOTH</em></span>
     <span class="nav-badge">FREE</span>
   </a>
-  <a class="nav-back" href="index.html">← Back to Tools</a>
+  <div class="nav-tools">
+    <a href="index.html">⬡ Subnet Calculator</a>
+    <a href="about.html">About</a>
+    <a href="privacy-policy.html" class="current" aria-current="page">Privacy</a>
+    <a href="cookie-policy.html">Cookies</a>
+  </div>
+</nav>
+
+<!-- Breadcrumb -->
+<nav aria-label="Breadcrumb" style="position:relative;z-index:1;padding:0.5rem 1.5rem;background:var(--bg-deep);border-bottom:1px solid var(--border)">
+  <ol style="list-style:none;display:flex;gap:0.5rem;align-items:center;max-width:860px;margin:0 auto;font-family:var(--font-mono);font-size:0.62rem;color:var(--text-dim)">
+    <li><a href="index.html" style="color:var(--accent);text-decoration:none">Network Sloth</a></li>
+    <li style="opacity:0.4">›</li>
+    <li style="color:var(--text-secondary)" aria-current="page">Privacy Policy</li>
+  </ol>
 </nav>
 
 <div class="page-hero">
@@ -634,19 +657,20 @@
 
 <footer>
   <div class="footer-inner">
-    <div class="logo" style="font-size:1rem">
+    <a class="logo" href="index.html" style="font-size:1rem;text-decoration:none" aria-label="Network Sloth — home">
       <span style="font-size:1.4rem">🦥</span>
       <span>NETWORK <em>SLOTH</em></span>
-    </div>
+    </a>
     <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim);letter-spacing:1px;text-align:center;font-style:italic">
       "Slow but determined subnetting since 2026"
     </div>
     <div class="footer-nav">
-      <a href="index.html">Tools</a>
+      <a href="index.html">Subnet Calculator</a>
+      <a href="index.html#faq">FAQ</a>
       <a href="about.html">About</a>
-      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="privacy-policy.html" aria-current="page">Privacy Policy</a>
       <a href="cookie-policy.html">Cookie Policy</a>
-      <a href="index.html#contact">Contact</a>
+      <a href="subnetting_cheat_sheet_1.pdf" target="_blank" rel="noopener">Subnet Cheat Sheet (PDF)</a>
     </div>
     <div class="footer-copy">
       © 2026 Network Sloth · Free tools for network engineers · All calculations provided for informational purposes only
@@ -654,6 +678,5 @@
   </div>
 </footer>
 
-<script src="cookie-consent.js"></script>
 </body>
 </html>

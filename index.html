@@ -133,10 +133,15 @@
 
 <!-- ── NAVIGATION ─────────────────────────────────────── -->
 <nav>
-  <div class="logo">
+  <a class="logo" href="/" aria-label="Network Sloth — home">
     <span class="logo-icon">🦥</span>
     <span>NETWORK <em>SLOTH</em></span>
     <span class="nav-badge">FREE</span>
+  </a>
+  <div class="nav-tools">
+    <a class="nav-tab" href="#faq"           style="text-decoration:none">FAQ</a>
+    <a class="nav-tab" href="about.html"     style="text-decoration:none">About</a>
+    <a class="nav-tab" href="subnetting_cheat_sheet_1.pdf" target="_blank" rel="noopener" style="text-decoration:none">📄 Cheat Sheet</a>
   </div>
 </nav>
 
@@ -804,19 +809,20 @@
     </div>
   </div>
   <div class="footer-inner">
-    <div class="logo" style="font-size:1rem">
+    <a class="logo" href="/" style="font-size:1rem;text-decoration:none" aria-label="Network Sloth — home">
       <span class="logo-icon" style="font-size:1.4rem">🦥</span>
       <span>NETWORK <em>SLOTH</em></span>
-    </div>
+    </a>
     <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim);letter-spacing:1px;text-align:center;font-style:italic">
       "Slow but determined subnetting since 2026"
     </div>
     <div class="footer-nav">
+      <a href="/#main-content">Subnet Calculator</a>
+      <a href="/#faq">FAQ</a>
       <a href="about.html">About</a>
       <a href="privacy-policy.html">Privacy Policy</a>
       <a href="cookie-policy.html">Cookie Policy</a>
-      <a href="Downloads/subnettinf-_heat_sheet.pdf">Subnet Cheat Sheet (PDF)</a>
-      <a href="#">Contact</a>
+      <a href="subnetting_cheat_sheet_1.pdf" target="_blank" rel="noopener">Subnet Cheat Sheet (PDF)</a>
     </div>
     <div class="footer-copy">
       © 2026 Network Sloth · Free tools for network engineers · All calculations provided for informational purposes only
@@ -825,6 +831,5 @@
 </footer>
 
 <script src="subnet-calculator.js"></script>
-<script src="cookie-consent.js"></script>
 </body>
 </html>

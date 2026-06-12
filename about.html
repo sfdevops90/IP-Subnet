@@ -3,8 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About — Network Sloth</title>
-  <meta name="description" content="About Network Sloth — free subnet calculator and network planning tools for network engineers. No sign-up, no nonsense, no backend.">
+  <title>About Network Sloth — Free Subnet Calculator for Network Engineers</title>
+  <meta name="description" content="About Network Sloth — free browser-based subnet calculator, VLSM planner, DHCP scope generator and firewall rule generator for network engineers. No sign-up, no backend.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://networksloth.io/about.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://networksloth.io/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "About",
+        "item": "https://networksloth.io/about.html"
+      }
+    ]
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -85,6 +107,15 @@
       padding: 0.35rem 0.85rem; transition: all 0.18s;
     }
     .nav-back:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+    .nav-tools { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+    .nav-tools a {
+      font-family: var(--font-display); font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 1.2px; text-transform: uppercase; text-decoration: none;
+      padding: 0.35rem 0.85rem; border: 1px solid var(--border); border-radius: 3px;
+      color: var(--text-secondary); transition: all 0.18s ease;
+    }
+    .nav-tools a:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+    .nav-tools a.current { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
 
     /* ── HERO ── */
     .page-hero {
@@ -255,12 +286,26 @@
 <body>
 
 <nav>
-  <a class="logo" href="index.html">
+  <a class="logo" href="index.html" aria-label="Network Sloth — home">
     <span class="logo-icon">🦥</span>
     <span>NETWORK <em>SLOTH</em></span>
     <span class="nav-badge">FREE</span>
   </a>
-  <a class="nav-back" href="index.html">← Back to Tools</a>
+  <div class="nav-tools">
+    <a href="index.html">⬡ Subnet Calculator</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="about.html" class="current" aria-current="page">About</a>
+    <a href="subnetting_cheat_sheet_1.pdf" target="_blank" rel="noopener">📄 Cheat Sheet</a>
+  </div>
+</nav>
+
+<!-- Breadcrumb -->
+<nav aria-label="Breadcrumb" style="position:relative;z-index:1;padding:0.5rem 1.5rem;background:var(--bg-deep);border-bottom:1px solid var(--border)">
+  <ol style="list-style:none;display:flex;gap:0.5rem;align-items:center;max-width:780px;margin:0 auto;font-family:var(--font-mono);font-size:0.62rem;color:var(--text-dim)">
+    <li><a href="index.html" style="color:var(--accent);text-decoration:none">Network Sloth</a></li>
+    <li style="opacity:0.4">›</li>
+    <li style="color:var(--text-secondary)" aria-current="page">About</li>
+  </ol>
 </nav>
 
 <div class="page-hero">
@@ -380,10 +425,12 @@
       "Slow but determined subnetting since 2026"
     </div>
     <div class="footer-nav">
-      <a href="about.html">About</a>
-      <a href="privacy-policy.html">Privacy Policy</a>
-      <a href="contact.html">Contact</a>
       <a href="index.html">Subnet Calculator</a>
+      <a href="index.html#faq">FAQ</a>
+      <a href="about.html" aria-current="page">About</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="cookie-policy.html">Cookie Policy</a>
+      <a href="subnetting_cheat_sheet_1.pdf" target="_blank" rel="noopener">Subnet Cheat Sheet (PDF)</a>
     </div>
     <div class="footer-copy">
       © 2026 Network Sloth · Free tools for network engineers · All calculations provided for informational purposes only
@@ -391,6 +438,5 @@
   </div>
 </footer>
 
-<script src="cookie-consent.js"></script>
 </body>
 </html>
