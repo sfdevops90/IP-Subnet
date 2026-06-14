@@ -382,6 +382,17 @@ function switchTab(tab) {
     document.getElementById('tab-' + t).style.display = t === tab ? 'block' : 'none';
     document.getElementById('tab-btn-' + t).classList.toggle('active', t === tab);
   });
+  scrollToTabArea();
+}
+
+/* Scroll to the top of the main tool area, offsetting for the sticky nav */
+function scrollToTabArea() {
+  const target = document.getElementById('main-col') || document.querySelector('.tab-switcher');
+  if (!target) return;
+  const navHeight = 58;
+  const gap       = 12;
+  const top       = target.getBoundingClientRect().top + window.scrollY - navHeight - gap;
+  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
 }
 
 /* Scenario step navigation */
@@ -389,6 +400,7 @@ function scenarioStep(step) {
   ['picker','editor','results'].forEach(s => {
     document.getElementById('sc-step-' + s).style.display = s === step ? 'block' : 'none';
   });
+  scrollToTabArea();
 }
 
 /* syncBadge — no-op; color read at generation time */
