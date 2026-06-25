@@ -766,12 +766,18 @@
   </div>
 </footer>
 
-<script>
-/* ── Cookie Consent Manager (mirrors main site logic) ── */
-const KEY = 'ns_cookie_consent';
+<!-- Single source of truth for consent state + AdSense loading.
+     Also shows the site's consent banner here if no preference
+     has been stored yet (visitors can land on this page first). -->
+<script src="cookie-consent.js"></script>
 
+<script>
+/* ── Cookie Consent Manager UI (this page only) ──────────
+   All actual consent storage / AdSense loading lives in
+   cookie-consent.js — this just drives the status text and
+   the two buttons above, and stays in sync via onChange(). */
 function readConsentStatus() {
-  const val = localStorage.getItem(KEY);
+  const val = window.NSCookieConsent.get();
   const el  = document.getElementById('consent-status');
   if (!el) return;
   if (val === 'accepted') {
@@ -784,21 +790,14 @@ function readConsentStatus() {
 }
 
 function updateConsent(accepted) {
-  localStorage.setItem(KEY, accepted ? 'accepted' : 'rejected');
+  if (accepted) window.NSCookieConsent.accept();
+  else window.NSCookieConsent.reject();
+  /* readConsentStatus() also runs automatically via onChange() below,
+     this call just makes the status text update immediately. */
   readConsentStatus();
-
-  /* If accepting and AdSense not already loaded, inject it */
-  if (accepted && !document.getElementById('adsense-script')) {
-    var s = document.createElement('script');
-    s.id          = 'adsense-script';
-    s.async       = true;
-    s.defer       = true;
-    s.crossOrigin = 'anonymous';
-    s.src         = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXX';
-    document.head.appendChild(s);
-  }
 }
 
+window.NSCookieConsent.onChange(readConsentStatus);
 readConsentStatus();
 </script>
 </body>
