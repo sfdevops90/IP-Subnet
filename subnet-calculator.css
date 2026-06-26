@@ -213,7 +213,7 @@ nav {
 
 .main-grid {
   display: grid;
-  grid-template-columns: 180px 1fr 180px;
+  grid-template-columns: 1fr;
   gap: 1.5rem;
   margin-top: 1.5rem;
   align-items: start;
