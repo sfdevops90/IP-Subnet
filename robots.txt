@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /privacy-policy.html
-Disallow: /cookie-policy.html
+
 Sitemap: https://networksloth.io/sitemap.xml

@@ -1,0 +1,15 @@
+# Network Sloth — ads.txt (Authorized Digital Sellers)
+# https://networksloth.io/ads.txt
+#
+# Once your AdSense account is approved, replace pub-XXXXXXXXXXXXXXXX
+# below with your real publisher ID. Use the SAME number as the
+# ca-pub-XXXXXXXXXX value already used elsewhere on this site (in
+# cookie-consent.js and the data-ad-client attributes) — just drop
+# the "ca-" prefix. Do not paste "ca-pub-..." here; Google will not
+# recognise it in this field.
+#
+# Format reference: google.com, pub-<ID>, DIRECT, f08c47fec0942fa0
+# f08c47fec0942fa0 is Google's own certification authority ID — it's
+# the same fixed value for every AdSense publisher, leave it as-is.
+
+google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
